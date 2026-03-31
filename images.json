@@ -1,57 +1,149 @@
-
 {
-  "microcement": [
-    { "file": "images/microcement-01.webp", "label": "Bathroom · Ivory", "location": "London", "domain": "residential" },
-    { "file": "images/microcement-02.webp", "label": "Hotel Corridor · Slate", "location": "Dublin", "domain": "hospitality" },
-    { "file": "images/microcement-03.webp", "label": "Living Space · Sand", "location": "London", "domain": "residential" },
-    { "file": "images/microcement-04.webp", "label": "Spa · Greige", "location": "Edinburgh", "domain": "wellness" },
-    { "file": "images/microcement-05.webp", "label": "Kitchen · Pearl", "location": "London", "domain": "residential" },
-    { "file": "images/microcement-06.webp", "label": "Office Reception · Charcoal", "location": "Dublin", "domain": "commercial" }
-  ],
-  "stone": [
-    { "file": "images/stone-01.webp", "label": "Pool Terrace · Sand", "location": "Kent", "domain": "residential" },
-    { "file": "images/stone-02.webp", "label": "Pool Surround · Pearl", "location": "Surrey", "domain": "residential" },
-    { "file": "images/stone-03.webp", "label": "Parking Ramp · Grey", "location": "Dublin", "domain": "industrial" },
-    { "file": "images/stone-04.webp", "label": "Garden Pathway · Ivory", "location": "London", "domain": "residential" },
-    { "file": "images/stone-05.webp", "label": "Public Entrance · Taupe", "location": "Manchester", "domain": "commercial" }
-  ],
-  "resin-performance": [
-    { "file": "images/resin-perf-01.webp", "label": "Distribution Centre · Light Grey", "location": "Birmingham", "domain": "industrial" },
-    { "file": "images/resin-perf-02.webp", "label": "Public Car Park · Anthracite", "location": "Dublin", "domain": "industrial" },
-    { "file": "images/resin-perf-03.webp", "label": "Logistics Hub · Mid Grey", "location": "Manchester", "domain": "industrial" },
-    { "file": "images/resin-perf-04.webp", "label": "Manufacturing Floor · Sage", "location": "Leeds", "domain": "industrial" },
-    { "file": "images/resin-perf-05.webp", "label": "Hospital Corridor · White", "location": "London", "domain": "industrial" },
-    { "file": "images/resin-perf-06.webp", "label": "Warehouse · Slate Blue", "location": "Bristol", "domain": "industrial" }
-  ],
-  "resin-design": [
-    { "file": "images/resin-design-01.webp", "label": "Showroom · Ivory Gloss", "location": "London", "domain": "commercial" },
-    { "file": "images/resin-design-02.webp", "label": "Retail Identity Floor · Black & Gold", "location": "Dublin", "domain": "commercial" },
-    { "file": "images/resin-design-03.webp", "label": "Restaurant · Terrazzo Effect", "location": "London", "domain": "hospitality" },
-    { "file": "images/resin-design-04.webp", "label": "Residential Decorative · Marble", "location": "Surrey", "domain": "residential" },
-    { "file": "images/resin-design-05.webp", "label": "Wayfinding System · Colour Zones", "location": "Manchester", "domain": "industrial" }
-  ],
-  "hybrid": [
-    { "file": "images/hybrid-01.webp", "label": "Matte + Gloss Composition", "location": "London", "domain": "residential" },
-    { "file": "images/hybrid-02.webp", "label": "Mineral + Resin Topcoat", "location": "Dublin", "domain": "residential" },
-    { "file": "images/hybrid-03.webp", "label": "Acrylic Composite · Bespoke", "location": "London", "domain": "commercial" },
-    { "file": "images/hybrid-04.webp", "label": "Textured Transparency", "location": "Edinburgh", "domain": "residential" }
-  ],
-  "projects": {
-    "architectural": [
-      { "file": "images/proj-arch-01.webp", "name": "Notting Hill Residence", "system": "Microcement", "location": "London" },
-      { "file": "images/proj-arch-02.webp", "name": "Wellness Retreat", "system": "Microcement + Stone Carpet", "location": "Dublin" },
-      { "file": "images/proj-arch-03.webp", "name": "Boutique Hotel", "system": "Design Resin", "location": "Edinburgh" },
-      { "file": "images/proj-arch-04.webp", "name": "Private Spa", "system": "Hybrid Surfaces", "location": "Surrey" },
-      { "file": "images/proj-arch-05.webp", "name": "Penthouse Kitchen", "system": "Microcement", "location": "London" },
-      { "file": "images/proj-arch-06.webp", "name": "Restaurant Interior", "system": "Design Resin", "location": "Dublin" }
+  "residential": {
+    "bathroom": [
+      { "src": "residential/bathroom/mc-gray-basin-01.webp", "name": "Stone Basin", "material": "Microcement · Slate", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/bathroom/mc-gray-bathroom-01.webp", "name": "Monolithic Bath", "material": "Microcement · Charcoal", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/bathroom/mc-greige-bathroom-01.webp", "name": "Greige Sanctuary", "material": "Microcement · Greige", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/bathroom/mc-ivory-basin-01.webp", "name": "Ivory Basin", "material": "Microcement · Ivory", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/bathroom/mc-ivory-bathroom-01.webp", "name": "Ivory Retreat", "material": "Microcement · Ivory", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/bathroom/mc-ivory-bathroom-02.webp", "name": "Soft Light Bath", "material": "Microcement · Ivory", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/bathroom/mc-ivory-bathroom-diptych-01.webp", "name": "Bath Detail", "material": "Microcement · Ivory", "location": "Private residence", "filter": "residential" }
     ],
-    "infrastructure": [
-      { "file": "images/proj-infra-01.webp", "name": "Logistics Centre 4,200 m²", "system": "Performance Resin · Epoxy", "location": "Birmingham" },
-      { "file": "images/proj-infra-02.webp", "name": "Public Car Park 6,800 m²", "system": "Performance Resin · MMA", "location": "Dublin" },
-      { "file": "images/proj-infra-03.webp", "name": "Manufacturing Facility 3,100 m²", "system": "Performance Resin · PU", "location": "Leeds" },
-      { "file": "images/proj-infra-04.webp", "name": "Distribution Hub 5,500 m²", "system": "Performance Resin · Polyester", "location": "Manchester" },
-      { "file": "images/proj-infra-05.webp", "name": "Hospital Wing 1,200 m²", "system": "Performance Resin · Epoxy", "location": "London" },
-      { "file": "images/proj-infra-06.webp", "name": "Parking Structure 8,000 m²", "system": "Stone Carpet + Performance Resin", "location": "Bristol" }
+    "living": [
+      { "src": "residential/living/mc-gray-living-01.webp", "name": "Dark Horizon", "material": "Microcement · Slate", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/living/mc-gray-living-02.webp", "name": "City View", "material": "Microcement · Slate", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/living/mc-gray-living-03.webp", "name": "Gold Accent Living", "material": "Microcement · Charcoal", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/living/mc-gray-living-04.webp", "name": "Corridor Study", "material": "Microcement · Slate", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/living/mc-gray-living-05.webp", "name": "Penthouse Living", "material": "Microcement · Slate", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/living/mc-gray-living-06.webp", "name": "Dark Wall Detail", "material": "Microcement · Charcoal", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/living/mc-gray-living-07.webp", "name": "Open Plan", "material": "Microcement · Greige", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/living/mc-gray-living-08.webp", "name": "Lounge", "material": "Microcement · Slate", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/living/mc-ivory-living-01.webp", "name": "Serene White", "material": "Microcement · Ivory", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/living/mc-ivory-living-02.webp", "name": "Sculptural Forms", "material": "Microcement · Ivory", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/living/mc-ivory-living-05.webp", "name": "Soft Living", "material": "Microcement · Ivory", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/living/mc-ivory-living-06.webp", "name": "Champagne Lounge", "material": "Microcement · Champagne", "location": "Private residence", "filter": "residential" }
+    ],
+    "staircase": [
+      { "src": "residential/staircase/mc-sand-staircase-01.webp", "name": "Sand Ascent", "material": "Microcement · Sand", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/staircase/staircase-gray-1.webp", "name": "Spiral in Slate", "material": "Microcement · Slate", "location": "Private residence", "filter": "residential" }
+    ],
+    "garage": [
+      { "src": "residential/garage/res-gar-02.webp", "name": "Private Garage", "material": "Performance Resin · Bordeaux", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/garage/res-gar-03.webp", "name": "Showroom Garage", "material": "Performance Resin · Pearl", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/garage/res-gar-04.webp", "name": "Champagne Floor", "material": "Performance Resin · Champagne", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/garage/res-gar-06.webp", "name": "Collector Garage", "material": "Performance Resin · Bordeaux", "location": "Private residence", "filter": "residential" },
+      { "src": "residential/garage/res-gar-07.webp", "name": "Flake Finish", "material": "Performance Resin · Flake", "location": "Private residence", "filter": "residential" }
     ]
+  },
+  "commercial": {
+    "showroom": [
+      { "src": "commercial/showroom/mc-ivoory-showroom-01.webp", "name": "White Showroom", "material": "Microcement · Ivory", "location": "Commercial space", "filter": "commercial" },
+      { "src": "commercial/showroom/mc-ivoory-showroom-02.webp", "name": "Sculptural Retail", "material": "Microcement · Ivory", "location": "Commercial space", "filter": "commercial" },
+      { "src": "commercial/showroom/resin-beige-showroom-01.webp", "name": "Beige Gallery", "material": "Performance Resin · Beige", "location": "Commercial space", "filter": "commercial" },
+      { "src": "commercial/showroom/resin-beige-showroom-02.webp", "name": "Gallery Floor", "material": "Performance Resin · Beige", "location": "Commercial space", "filter": "commercial" },
+      { "src": "commercial/showroom/resin-green-showroom-01.webp", "name": "Green Loft", "material": "Design Resin · Forest", "location": "Commercial space", "filter": "commercial" },
+      { "src": "commercial/showroom/resin-green-showroom-02.webp", "name": "Emerald Space", "material": "Design Resin · Emerald", "location": "Commercial space", "filter": "commercial" },
+      { "src": "commercial/showroom/resin-green-showroom-03.webp", "name": "Green Studio", "material": "Design Resin · Forest", "location": "Commercial space", "filter": "commercial" }
+    ],
+    "office": [
+      { "src": "commercial/office/com-off-01.webp", "name": "Barbershop Rouge", "material": "Design Resin · Bordeaux", "location": "Commercial space", "filter": "commercial" },
+      { "src": "commercial/office/com-off-02.webp", "name": "Barbershop Verde", "material": "Design Resin · Forest", "location": "Commercial space", "filter": "commercial" },
+      { "src": "commercial/office/com-off-03.webp", "name": "Dark Office", "material": "Microcement · Charcoal", "location": "Commercial space", "filter": "commercial" },
+      { "src": "commercial/office/com-off-04.webp", "name": "Executive Floor", "material": "Microcement · Slate", "location": "Commercial space", "filter": "commercial" },
+      { "src": "commercial/office/com-off-05.webp", "name": "Corridor Office", "material": "Microcement · Slate", "location": "Commercial space", "filter": "commercial" },
+      { "src": "commercial/office/com-off-07.webp", "name": "Reception Hall", "material": "Performance Resin · Pearl", "location": "Commercial space", "filter": "commercial" }
+    ],
+    "parking": [
+      { "src": "commercial/parking/com-park-01.webp", "name": "Multi-level Parking", "material": "MMA Resin · Light Grey", "location": "Commercial", "filter": "commercial" },
+      { "src": "commercial/parking/com-park-02.webp", "name": "Underground Parking", "material": "MMA Resin · Grey", "location": "Commercial", "filter": "commercial" },
+      { "src": "commercial/parking/com-park-03.webp", "name": "Parking with Markings", "material": "MMA Resin · Grey", "location": "Commercial", "filter": "commercial" },
+      { "src": "commercial/parking/com-park-04.webp", "name": "Dark Parking", "material": "MMA Resin · Anthracite", "location": "Commercial", "filter": "commercial" },
+      { "src": "commercial/parking/com-park-05.webp", "name": "Luxury Parking", "material": "Performance Resin · Charcoal", "location": "Commercial", "filter": "commercial" },
+      { "src": "commercial/parking/com-park-06.webp", "name": "Linear Parking", "material": "MMA Resin · Grey", "location": "Commercial", "filter": "commercial" },
+      { "src": "commercial/parking/com-park-07.webp", "name": "White Line Parking", "material": "MMA Resin · Light Grey", "location": "Commercial", "filter": "commercial" },
+      { "src": "commercial/parking/com-park-08.webp", "name": "Open Parking", "material": "MMA Resin · Grey", "location": "Commercial", "filter": "commercial" },
+      { "src": "commercial/parking/com-park-09.webp", "name": "Yellow Stripe", "material": "MMA Resin · Grey", "location": "Commercial", "filter": "commercial" }
+    ]
+  },
+  "industrial": [
+    { "src": "industrial/ind-01.webp", "name": "Warehouse Floor", "material": "PU Resin · Flake", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-02.webp", "name": "Distribution Centre", "material": "MMA Resin · Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-04.webp", "name": "Logistics Hub", "material": "PU Resin · Light Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-05.webp", "name": "Cold Store", "material": "MMA Resin · Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-06.webp", "name": "Seamless Hall", "material": "PU Resin · Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-07.webp", "name": "Beige Industrial", "material": "PU Resin · Sand", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-08.webp", "name": "Window Hall", "material": "PU Resin · Light Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-09.webp", "name": "Reflective Floor", "material": "Epoxy Resin · Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-10.webp", "name": "Dock Entry", "material": "MMA Resin · Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-11.webp", "name": "Exterior Apron", "material": "MMA Resin · Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-12.webp", "name": "Loading Bay", "material": "MMA Resin · Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-13.webp", "name": "Flake Warehouse", "material": "PU Resin · Flake", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-14.webp", "name": "Long Hall", "material": "PU Resin · Light Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-15.webp", "name": "Clean Room", "material": "PU Resin · White", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-16.webp", "name": "Exterior Flake", "material": "Stone Carpet · Anthracite", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-17.webp", "name": "Dock Exterior", "material": "Stone Carpet · Anthracite", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-18.webp", "name": "Green Exterior", "material": "Stone Carpet · Green", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-19.webp", "name": "Perimeter Strip", "material": "Stone Carpet · Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-lightgrey-warehouse-01.gif", "name": "Real Warehouse", "material": "PU Resin · Light Grey", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-white-warehouse-01.webp", "name": "White Warehouse", "material": "Epoxy Resin · White", "location": "Industrial", "filter": "industrial" },
+    { "src": "industrial/ind-yellow-01.webp", "name": "Food Grade Facility", "material": "PU Resin · Food Grade", "location": "Industrial", "filter": "industrial" }
+  ],
+  "exterior": {
+    "driveway": [
+      { "src": "exterior/driveway/ext-drv-01.webp", "name": "Stone Drive", "material": "Stone Carpet · Ivory", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/ext-drv-02.webp", "name": "Diptych Drive", "material": "Stone Carpet · Ivory", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/ext-drv-03.webp", "name": "Garden Entry", "material": "Stone Carpet · Ivory", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/ext-drv-04.webp", "name": "Stone Path", "material": "Stone Carpet · Sand", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/ext-drv-05.webp", "name": "Luxury Drive", "material": "Stone Carpet · Ivory", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/ext-drv-06.webp", "name": "Cobbled Context", "material": "Stone Carpet · Ivory", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/ext-drv-07.webp", "name": "Long Drive", "material": "Stone Carpet · Sand", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/ext-drv-08.webp", "name": "Stone Detail", "material": "Stone Carpet · Ivory", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/ext-drv-10.webp", "name": "Minimalist Drive", "material": "Stone Carpet · Sand", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/ext-drv-11.webp", "name": "Car Drive", "material": "Stone Carpet · Ivory", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/ext-drv-12.webp", "name": "Open Gate", "material": "Stone Carpet · Sand", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/ext-drv-13.webp", "name": "Evening Drive", "material": "Stone Carpet · Ivory", "location": "Private residence", "filter": "exterior" },
+      { "src": "exterior/driveway/sc-ivory-context-01.webp", "name": "Irish Context", "material": "Stone Carpet · Ivory", "location": "Ireland", "filter": "exterior" },
+      { "src": "exterior/driveway/sc-ivory-driveway-01.webp", "name": "Heritage Drive", "material": "Stone Carpet · Ivory", "location": "Ireland", "filter": "exterior" },
+      { "src": "exterior/driveway/sc-ivory-driveway-02.webp", "name": "Estate Drive", "material": "Stone Carpet · Ivory", "location": "Ireland", "filter": "exterior" },
+      { "src": "exterior/driveway/sc-ivory-driveway-03.webp", "name": "Country Drive", "material": "Stone Carpet · Ivory", "location": "Ireland", "filter": "exterior" },
+      { "src": "exterior/driveway/sc-ivory-driveway-04.webp", "name": "Sunset Drive", "material": "Stone Carpet · Ivory", "location": "Ireland", "filter": "exterior" },
+      { "src": "exterior/driveway/sc-ivory-luxury-01.webp", "name": "Luxury Estate", "material": "Stone Carpet · Ivory", "location": "Belgium", "filter": "exterior" }
+    ],
+    "terrace": [
+      { "src": "exterior/terrace/ext-ter-01.webp", "name": "Urban Terrace", "material": "Stone Carpet · Anthracite", "location": "Commercial exterior", "filter": "exterior" },
+      { "src": "exterior/terrace/ext-ter-02.webp", "name": "Mountain Context", "material": "Stone Carpet · Grey", "location": "Exterior", "filter": "exterior" },
+      { "src": "exterior/terrace/ext-ter-03.webp", "name": "Brick & Stone", "material": "Stone Carpet · Anthracite", "location": "Commercial exterior", "filter": "exterior" }
+    ]
+  },
+  "signature": [
+    { "src": "signature/mc-slate-sculptural-01.webp", "name": "Slate Monolith", "material": "Microcement · Slate · Signature", "location": "Private residence", "filter": "signature" },
+    { "src": "signature/resin-blackgold-01.webp", "name": "Black Gold", "material": "Design Resin · Black & Gold", "location": "Showroom", "filter": "signature" },
+    { "src": "signature/resin-blackgold-02.webp", "name": "Gold River", "material": "Design Resin · Black & Gold", "location": "Commercial", "filter": "signature" },
+    { "src": "signature/resin-blackgold-03.webp", "name": "Galaxy Floor", "material": "Design Resin · Black & Gold", "location": "Gallery", "filter": "signature" },
+    { "src": "signature/resin-blackgold-showroom-01.webp", "name": "Black Gold Showroom", "material": "Design Resin · Black & Gold", "location": "Gallery", "filter": "signature" },
+    { "src": "signature/resin-blackgray-01.webp", "name": "Dark Marble", "material": "Design Resin · Marble Effect", "location": "Signature", "filter": "signature" },
+    { "src": "signature/resin-geometric-01.webp", "name": "Geometric", "material": "Design Resin · Multicolour", "location": "Commercial", "filter": "signature" },
+    { "src": "signature/resin-multicolor-01.webp", "name": "Multicolour Field", "material": "Design Resin · Bespoke", "location": "Commercial", "filter": "signature" },
+    { "src": "signature/resin-whitegold-01.webp", "name": "White Gold Vein", "material": "Design Resin · White & Gold", "location": "Signature", "filter": "signature" }
+  ],
+  "textures": {
+    "microcement": [
+      { "src": "textures/microcement/tex-mc-01.webp", "colour": "Charcoal", "finish": "Raw" },
+      { "src": "textures/microcement/tex-mc-02.webp", "colour": "Slate", "finish": "Raw" },
+      { "src": "textures/microcement/tex-mc-03.webp", "colour": "Slate", "finish": "Satin" },
+      { "src": "textures/microcement/tex-mc-04.webp", "colour": "Blue Grey", "finish": "Satin" },
+      { "src": "textures/microcement/tex-mc-05.webp", "colour": "Charcoal", "finish": "Raw" },
+      { "src": "textures/microcement/tex-mc-06.webp", "colour": "Charcoal", "finish": "Near-matte" },
+      { "src": "textures/microcement/tex-mc-07.webp", "colour": "Slate", "finish": "Raw" },
+      { "src": "textures/microcement/tex-mc-08.webp", "colour": "Ivory", "finish": "Satin" },
+      { "src": "textures/microcement/tex-mc-09.webp", "colour": "Sand", "finish": "Raw" },
+      { "src": "textures/microcement/tex-mc-10.webp", "colour": "Ivory", "finish": "Raw" },
+      { "src": "textures/microcement/tex-mc-11.webp", "colour": "Charcoal", "finish": "Satin" }
+    ],
+    "stone-carpet": [
+      { "src": "textures/stone-carpet/tex-sc-01.webp", "colour": "Mixed", "finish": "Natural" },
+      { "src": "textures/stone-carpet/tex-sc-02.webp", "colour": "Anthracite", "finish": "Natural" }
+    ],
+    "resin": []
   }
 }
