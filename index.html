@@ -35,6 +35,7 @@
     </div>
   </div>
 
+  <!-- ══ NAV — Task 1: ordine nouă, Sig Series last cu stil exclusiv ══ -->
   <nav class="nav" id="nav" aria-label="Primary">
     <a href="#intro" class="nav__wordmark" aria-label="Deco Preda home">
       DECO<span class="nav__wordmark-thin">PREDA</span>
@@ -47,8 +48,9 @@
       <a href="#systems"              class="nav__item" data-cursor="link">Systems</a>
       <a href="#projects"             class="nav__item" data-cursor="link">Projects</a>
       <a href="#craft"                class="nav__item" data-cursor="link">Craft</a>
-      <a href="signature-series.html" class="nav__item" data-cursor="link">Signature Series</a>
       <a href="gallery.html"          class="nav__item" data-cursor="link">Gallery</a>
+      <a href="testimonials.html"     class="nav__item" data-cursor="link">Testimonials</a>
+      <a href="signature-series.html" class="nav__item nav__item--sig" data-cursor="link" aria-label="Signature Series — exclusive commissions only">Signature Series</a>
       <a href="#contact"              class="nav__item nav__item--cta" data-cursor="link">Contact</a>
     </div>
   </nav>
@@ -488,7 +490,6 @@
       </div>
       <div class="project-rows">
 
-        <!-- I — Architectural -->
         <div class="project-row reveal">
           <div class="project-row__img project-row__img--arch" aria-hidden="true">
             <div class="project-row__caption">Architectural &amp; Living</div>
@@ -502,7 +503,6 @@
           </div>
         </div>
 
-        <!-- II — Infrastructure -->
         <div class="project-row project-row--inv reveal">
           <div class="project-row__img project-row__img--infra" aria-hidden="true">
             <div class="project-row__caption">Infrastructure &amp; Logistics</div>
@@ -549,34 +549,18 @@
       </div>
     </section>
 
-    <!-- ══ SIGNATURE SERIES ══ -->
-    <section class="sig-band" id="signature-series" aria-label="Signature Series">
-      <div class="sig-band__bg" aria-hidden="true"></div>
-      <div class="sig-band__content">
-        <div class="wrap">
-          <div class="sig-band__inner reveal">
-            <div class="sig-band__left">
-              <span class="sig-band__eyebrow">05 — Premium Tier</span>
-              <h2 class="sig-band__h">Signature<br><em>Series</em></h2>
-              <p class="sig-band__p">Hybrid compositions at the intersection of material science and design intent. Microcement combined with resin topcoats. Acrylic composites. Mineral layers paired with metallic pigments. Matte and gloss within a single seamless surface. Textures that cannot be replicated — only commissioned.</p>
-              <a href="signature-series.html" class="btn-ghost sig-band__cta" data-cursor="link" data-magnetic>
-                <span class="btn-ghost__label">Explore Signature Series</span>
-                <span class="btn-ghost__icon" aria-hidden="true">→</span>
-              </a>
-            </div>
-            <div class="sig-band__right">
-              <div class="sig-band__swatches">
-                <div class="sig-band__swatch sig-band__swatch--1"></div>
-                <div class="sig-band__swatch sig-band__swatch--2"></div>
-                <div class="sig-band__swatch sig-band__swatch--3"></div>
-                <div class="sig-band__swatch sig-band__swatch--4"></div>
-              </div>
-              <p class="sig-band__note">Available on commission only</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- ══ Task 2 — INVITATION STRIP (înlocuiește .sig-band) ══
+         Craft (--ivory-2) → strip (--dark-bg) → Contact (--ivory)
+         Un singur rând orizontal, minimal, ca un șoaptă.
+    ══ -->
+    <div class="invite-strip" role="complementary" aria-label="Signature Series invitation">
+      <p class="invite-strip__line">
+        Some surfaces cannot be specified — only commissioned.
+      </p>
+      <a href="signature-series.html" class="invite-strip__cta" data-cursor="link" aria-label="Explore Signature Series — exclusive commissions">
+        Signature Series <span class="invite-strip__arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
 
     <!-- ══ CONTACT ══ -->
     <section class="commission" id="contact" aria-label="Contact">
@@ -628,6 +612,7 @@
 
   </main>
 
+  <!-- ══ FOOTER — Task 3: Testimonials + Signature Series adăugate ══ -->
   <footer class="foot" role="contentinfo">
     <div class="wrap">
       <div class="foot__inner">
@@ -640,8 +625,9 @@
           <a href="#systems">Systems</a>
           <a href="#projects">Projects</a>
           <a href="#craft">Craft</a>
-          <a href="signature-series.html">Signature Series</a>
           <a href="gallery.html">Gallery</a>
+          <a href="testimonials.html">Testimonials</a>
+          <a href="signature-series.html">Signature Series</a>
           <a href="#contact">Contact</a>
         </nav>
         <p class="foot__copy">&copy; <span id="yr"></span> Deco Preda Ltd. Dublin · Ireland &amp; Europe.</p>
@@ -652,7 +638,6 @@
   <script src="script.js"></script>
   <script>
   (function() {
-    // WHO WE ARE accordion
     const btnOpen  = document.getElementById('whoToggle');
     const btnClose = document.getElementById('whoClose');
     const aside    = document.getElementById('whoAside');
