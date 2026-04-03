@@ -420,7 +420,13 @@ document.querySelectorAll('.panel').forEach(panel => {
   } catch (e) { console.info('[Deco Preda] images.json not found — using fallback gradients.'); }
 })();
 
-/* ══ SYSTEMS FILTER — Seal version ══ */
+/* ══════════════════════════════════════════════════════════
+   SYSTEMS FILTER — Seal version
+   FIX: sigiliul se pozitioneaza relativ la .systems__panels
+        (care are position:relative din CSS), nu la <body>.
+        Calculul foloseste offsetTop/offsetLeft, nu
+        getBoundingClientRect() + window.scrollY.
+   ══════════════════════════════════════════════════════════ */
 (function initSystemsFilter() {
   const panels     = Array.from(document.querySelectorAll('.panel[data-domain]'));
   const moreWrap   = document.getElementById('systemsMore');
@@ -431,65 +437,57 @@ document.querySelectorAll('.panel').forEach(panel => {
 
   if (!panels.length) return;
 
+  /* ── IMPORTANT: .systems__panels trebuie position:relative
+     pentru ca sigiliul absolut sa se ancoreze corect.
+     Il setam direct din JS ca backup, chiar daca e si in CSS. ── */
+  if (panelsGrid) panelsGrid.style.position = 'relative';
+
   const COPY = {
     industrial: {
       subline:        '2 systems specified for your environment.',
-      sealText:       'View Architectural\n& Living Systems',
+      sealText:       'View Architectural & Living Systems',
       mobileMoreText: '+ 2 more systems',
     },
     architectural: {
       subline:        'Infinite application.',
-      sealText:       'View Industrial\n& Logistics Systems',
+      sealText:       'View Industrial & Logistics Systems',
       mobileMoreText: '+ 2 more systems',
     },
   };
 
-  // Elementele create dinamic
   let sealEl       = null;
   let dividerEl    = null;
   let mobileMoreEl = null;
 
   function cleanup() {
     if (sealEl)       { sealEl.remove();       sealEl = null; }
-    if (dividerEl)    { dividerEl.remove();    dividerEl = null; }
-    if (mobileMoreEl) { mobileMoreEl.remove(); mobileMoreEl = null; }
+    if (dividerEl)    { dividerEl.remove();     dividerEl = null; }
+    if (mobileMoreEl) { mobileMoreEl.remove();  mobileMoreEl = null; }
   }
 
   function revealVeiled() {
-    // Dezvoalez toate panelurile
     panels.forEach(panel => {
       panel.classList.remove('is-veiled');
       panel.classList.add('is-revealed');
     });
-
-    // Ascund sigiliul si elementele auxiliare
     if (sealEl)       sealEl.classList.add('is-hidden');
     if (dividerEl)    dividerEl.classList.add('is-hidden');
     if (mobileMoreEl) mobileMoreEl.classList.add('is-hidden');
-
-    // Reset grid
-    if (panelsGrid) panelsGrid.classList.remove('filtered-2', 'filtered-3');
+    if (panelsGrid)   panelsGrid.classList.remove('filtered-2', 'filtered-3');
   }
 
   function filterByDomain(domain) {
-    // Curata elementele anterioare
     cleanup();
 
-    // Reset toate panelurile
     panels.forEach(panel => {
       panel.classList.remove('is-hidden', 'is-veiled', 'is-revealed');
       panel.style.display = '';
     });
 
-    // Update heading
     if (heading) heading.innerHTML = COPY[domain].subline;
-
-    // Ascunde More accordion
     if (moreWrap) moreWrap.style.display = 'none';
 
-    // Clasifica panelurile
     const secondary = [];
-    let firstSecondary = null;
 
     panels.forEach(panel => {
       const pd = panel.dataset.domain;
@@ -497,124 +495,115 @@ document.querySelectorAll('.panel').forEach(panel => {
       if (!isPrimary) {
         panel.classList.add('is-veiled');
         secondary.push(panel);
-        if (!firstSecondary) firstSecondary = panel;
       }
     });
-    // Reordonează DOM: primare primele, voalate ultimele
-panels.forEach(panel => {
-  if (!panel.classList.contains('is-veiled')) {
-    panelsGrid.insertBefore(panel, panelsGrid.firstChild);
-  }
-});
-panels.forEach(panel => {
-  if (panel.classList.contains('is-veiled')) {
-    panelsGrid.appendChild(panel);
-  }
-});
+
+    /* Reordonare DOM: primare primele, voalate ultimele */
+    panels.forEach(panel => {
+      if (!panel.classList.contains('is-veiled')) {
+        panelsGrid.insertBefore(panel, panelsGrid.firstChild);
+      }
+    });
+    panels.forEach(panel => {
+      if (panel.classList.contains('is-veiled')) {
+        panelsGrid.appendChild(panel);
+      }
+    });
 
     if (!secondary.length || !panelsGrid) return;
 
-    // ── Divider simplu inainte de zona voalata ──
-    dividerEl = document.createElement('div');
-    dividerEl.className = 'systems__veil-divider';
-    firstSecondary = panelsGrid.querySelector('.panel.is-veiled');
-
-    // ── Calculeaza pozitia si dimensiunea zonei voalate ──
-    // Sigiliul se pozitioneaza absolut peste panelurile voalate
-    // Folosim un wrapper relativ in jurul intregului grid
-
-    // ── Sigiliu desktop ──
+    /* ── Sigiliu desktop ──
+       Appended la .systems__panels (care are position:relative).
+       Pozitionarea foloseste offsetTop/offsetLeft ale panelurilor
+       voalate — coordonate RELATIVE LA PARENT, nu la viewport.
+       Asta elimina dependenta de window.scrollY si e corect
+       indiferent de pozitia paginii la momentul render-ului. */
     sealEl = document.createElement('div');
     sealEl.className = 'systems__seal';
+    sealEl.innerHTML = `
+      <button class="systems__seal-btn" type="button">
+        <span>${COPY[domain].sealText}</span>
+        <span class="systems__seal-icon" aria-hidden="true">→</span>
+      </button>`;
 
-    const copy     = COPY[domain];
-    const lines    = copy.sealText.split('\n');
+    /* Append la grid (position:relative), nu la .systems */
+    panelsGrid.appendChild(sealEl);
+    sealEl.querySelector('.systems__seal-btn').addEventListener('click', revealVeiled);
 
-   sealEl.innerHTML = `
-  <button class="systems__seal-btn" type="button">
-    <span>${copy.sealText.replace('\n', ' ')}</span>
-    <span class="systems__seal-icon" aria-hidden="true">→</span>
-  </button>
-`;
+    /* Pozitionare dupa render */
+    requestAnimationFrame(() => positionSeal());
 
-    // Inseram sigiliul DUPA primul panou voalat
-    // si il pozitionam cu JS dupa render
-    document.querySelector('.systems').appendChild(sealEl);
-
-    sealEl.querySelector('.systems__seal-btn')
-      .addEventListener('click', revealVeiled);
-
-    // Pozitionare dinamica dupa render
-    requestAnimationFrame(() => {
-      positionSeal();
-    });
-
-    // ── Buton mobil ──
+    /* ── Buton mobil ── */
+    const firstVeiled = panelsGrid.querySelector('.panel.is-veiled');
     mobileMoreEl = document.createElement('div');
     mobileMoreEl.className = 'systems__mobile-more';
     mobileMoreEl.innerHTML = `
       <button class="systems__mobile-more-btn" type="button">
-        <span>${copy.mobileMoreText}</span>
+        <span>${COPY[domain].mobileMoreText}</span>
         <span aria-hidden="true">↓</span>
-      </button>
-    `;
-    panelsGrid.insertBefore(mobileMoreEl, firstSecondary);
+      </button>`;
+    if (firstVeiled) panelsGrid.insertBefore(mobileMoreEl, firstVeiled);
+    else panelsGrid.appendChild(mobileMoreEl);
 
-    mobileMoreEl.querySelector('.systems__mobile-more-btn')
-      .addEventListener('click', () => {
-        // Pe mobile — arata panelurile ascunse
-        secondary.forEach(p => {
-          p.style.display = '';
-          p.classList.remove('is-veiled');
-          p.classList.add('is-revealed');
-        });
-        mobileMoreEl.classList.add('is-hidden');
-        dividerEl && dividerEl.classList.add('is-hidden');
+    mobileMoreEl.querySelector('.systems__mobile-more-btn').addEventListener('click', () => {
+      secondary.forEach(p => {
+        p.style.display = '';
+        p.classList.remove('is-veiled');
+        p.classList.add('is-revealed');
       });
+      mobileMoreEl.classList.add('is-hidden');
+    });
   }
 
+  /* ────────────────────────────────────────────────────────
+     positionSeal — CORECT:
+     Sigiliul e child al .systems__panels (position:relative).
+     Folosim offsetTop/offsetLeft ale panelurilor voalate,
+     care sunt deja relative la .systems__panels.
+     NU folosim getBoundingClientRect() + window.scrollY
+     deoarece asta depinde de scroll si de pozitia in viewport.
+  ──────────────────────────────────────────────────────── */
   function positionSeal() {
-    if (!sealEl) return;
+    if (!sealEl || !panelsGrid) return;
 
-    const veiledPanels = panels.filter(p => p.classList.contains('is-veiled'));
+    const veiledPanels = panels.filter(p => p.classList.contains('is-veiled') && !p.classList.contains('is-hidden'));
     if (!veiledPanels.length) return;
 
-    const gridRect  = panelsGrid.getBoundingClientRect();
-    const first     = veiledPanels[0].getBoundingClientRect();
-    const last      = veiledPanels[veiledPanels.length - 1].getBoundingClientRect();
+    /* offsetLeft/offsetTop sunt relative la offsetParent.
+       Asiguram ca offsetParent e panelsGrid setand position:relative. */
+    const firstPanel = veiledPanels[0];
+    const lastPanel  = veiledPanels[veiledPanels.length - 1];
 
-    // Zona voalata relativa la .systems section
-    const sysEl     = document.querySelector('.systems');
-    const sysRect   = sysEl.getBoundingClientRect();
+    const zoneLeft   = firstPanel.offsetLeft;
+    const zoneTop    = firstPanel.offsetTop;
+    const zoneRight  = lastPanel.offsetLeft  + lastPanel.offsetWidth;
+    const zoneBottom = lastPanel.offsetTop   + lastPanel.offsetHeight;
 
-    const zoneLeft   = first.left  - sysRect.left;
-    const zoneTop    = first.top   - sysRect.top  + window.scrollY;
-    const zoneWidth  = last.right  - first.left;
-    const zoneHeight = last.bottom - first.top;
+    const zoneCenterX = (zoneLeft + zoneRight)  / 2;
+    /* Pozitionam sigiliul la 50% pe verticala imaginilor (nu intregului panel) */
+    const imgHeight   = clamp(220, 200, 320); /* Inaltime carousel aproximativa */
+    const sealY       = zoneTop + imgHeight * 0.50;
 
-    sealEl.style.position = 'absolute';
-    sealEl.style.left     = (zoneLeft + zoneWidth  / 2) + 'px';
-    sealEl.style.top = (zoneTop + zoneHeight * 0.65) + 'px';
+    sealEl.style.position  = 'absolute';
+    sealEl.style.left      = zoneCenterX + 'px';
+    sealEl.style.top       = sealY + 'px';
     sealEl.style.transform = 'translate(-50%, -50%)';
-    sealEl.style.zIndex   = '10';
+    sealEl.style.zIndex    = '10';
+    sealEl.style.pointerEvents = 'auto';
   }
 
-  // Re-pozitionare la resize
   window.addEventListener('resize', () => {
     if (sealEl && !sealEl.classList.contains('is-hidden')) {
       requestAnimationFrame(positionSeal);
     }
   });
 
-  // Scroll — re-pozitionare nu e necesara (position e relativa la .systems)
-
   if (btnInd) {
     btnInd.addEventListener('click', (e) => {
       e.preventDefault();
       filterByDomain('industrial');
       document.getElementById('systems').scrollIntoView({ behavior: 'smooth' });
-      // Re-pozitioneaza dupa scroll
-      setTimeout(positionSeal, 600);
+      setTimeout(positionSeal, 650);
     });
   }
 
@@ -623,7 +612,7 @@ panels.forEach(panel => {
       e.preventDefault();
       filterByDomain('architectural');
       document.getElementById('systems').scrollIntoView({ behavior: 'smooth' });
-      setTimeout(positionSeal, 600);
+      setTimeout(positionSeal, 650);
     });
   }
 
