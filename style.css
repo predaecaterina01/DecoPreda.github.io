@@ -3373,3 +3373,19 @@ button {
     z-index: 10000 !important;
   }
 }
+/* DEBUG NAV */
+@media (max-width: 900px) {
+  .nav__panel.open {
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    background: red !important;
+    width: 200px !important;
+    height: 400px !important;
+    top: 0 !important;
+    right: 0 !important;
+    position: fixed !important;
+    z-index: 99999 !important;
+    display: block !important;
+  }
+}
