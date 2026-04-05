@@ -3123,16 +3123,16 @@ button {
 
 
 /* ══════════════════════════════════════════════════════════
-   38. MOBILE NAV — FLOATING SIDEBAR (versiune unică, finală)
+   38. MOBILE NAV — FLOATING SIDEBAR (versiune finală fixată)
    ══════════════════════════════════════════════════════════ */
 
-/* ── Backdrop ── */
+/* ── Backdrop — întunecare subtilă a fundalului ── */
 .nav__backdrop {
   display: none;
   position: fixed;
   inset: 0;
   z-index: 9998;
-  background: rgba(8, 7, 6, 0.30);
+  background: rgba(8, 7, 6, 0.25);
   opacity: 0;
   transition: opacity 0.30s ease;
   pointer-events: none;
@@ -3179,7 +3179,7 @@ button {
 
   .nav__burger { display: flex !important; }
 
-  /* Panel — container fix, FĂRĂ overflow propriu */
+  /* ── Panel container — NU face scroll propriu ── */
   .nav__panel {
     position: fixed !important;
     top: 0 !important;
@@ -3188,57 +3188,71 @@ button {
     bottom: auto !important;
     width: 65vw !important;
     max-width: 300px !important;
+    /* Înălțime suficientă pentru toate link-urile */
     height: auto !important;
-    max-height: calc(var(--nav-h, 64px) + 168px) !important;
-    background: rgba(248, 245, 240, 0.88) !important;
-    backdrop-filter: blur(20px) saturate(1.5) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
-    border-left: 1px solid rgba(138, 129, 120, 0.18) !important;
-    border-bottom: 1px solid rgba(138, 129, 120, 0.12) !important;
+    max-height: 90vh !important;
+    /* Panel LUMINOS — alb/crem cu blur puternic */
+    background: rgba(252, 249, 245, 0.96) !important;
+    backdrop-filter: blur(24px) saturate(1.6) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(1.6) !important;
+    border-left: 1px solid rgba(138, 129, 120, 0.20) !important;
+    border-bottom: 1px solid rgba(138, 129, 120, 0.14) !important;
     border-top: none !important;
     border-right: none !important;
-    border-radius: 0 0 0 16px !important;
-    box-shadow: -6px 6px 36px rgba(8, 7, 6, 0.18) !important;
+    border-radius: 0 0 0 20px !important;
+    box-shadow:
+      -8px 8px 40px rgba(8, 7, 6, 0.14),
+      -2px 0 12px rgba(8, 7, 6, 0.06),
+      inset 0 0 0 0.5px rgba(255,255,255,0.5) !important;
+    /* CRITIC: overflow hidden pe panel, scroll pe menu-scroll interior */
     overflow: hidden !important;
     z-index: 9999 !important;
+    /* Închis implicit */
     pointer-events: none !important;
-    transform: translateX(110%) !important;
+    transform: translateX(105%) !important;
     opacity: 0 !important;
-    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
-                opacity 0.24s ease !important;
+    transition:
+      transform 0.40s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.26s ease !important;
   }
 
+  /* Panel deschis */
   .nav__panel.open {
     transform: translateX(0) !important;
     opacity: 1 !important;
     pointer-events: auto !important;
   }
 
-  /* Fade gradient jos — indicator scroll */
+  /* Gradient fade jos — indicator scroll */
   .nav__panel::after {
     content: '' !important;
     position: absolute !important;
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    height: 48px !important;
-    background: linear-gradient(to top, rgba(248,245,240,0.95) 0%, transparent 100%) !important;
+    height: 52px !important;
+    background: linear-gradient(
+      to top,
+      rgba(252, 249, 245, 0.98) 0%,
+      transparent 100%
+    ) !important;
     pointer-events: none !important;
     z-index: 2 !important;
   }
 
-  /* .menu-scroll — zona care face scroll */
+  /* ── menu-scroll — zona scrollabilă ── */
   .menu-scroll {
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-end !important;
-    min-height: 100% !important;
-    height: 100% !important;
+    /* Înălțime = panel - nimic fix, crește cu conținut */
+    width: 100% !important;
     padding-top: calc(var(--nav-h, 64px) + 16px) !important;
     padding-right: 28px !important;
-    padding-bottom: 24px !important;
+    padding-bottom: 28px !important;
     padding-left: 12px !important;
     box-sizing: border-box !important;
+    /* SCROLL ACTIV */
     overflow-y: auto !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
@@ -3246,14 +3260,17 @@ button {
     overscroll-behavior: contain !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
+    /* Asigură că prinde touch-urile */
+    position: relative !important;
+    z-index: 1 !important;
   }
   .menu-scroll::-webkit-scrollbar { display: none !important; }
 
-  /* Link-uri */
+  /* ── Link-uri — luminoase, click activ ── */
   .nav__item {
     font-family: var(--serif) !important;
     font-weight: 300 !important;
-    font-size: clamp(21px, 5.2vw, 27px) !important;
+    font-size: clamp(22px, 5.5vw, 28px) !important;
     letter-spacing: 0.01em !important;
     text-transform: none !important;
     text-align: right !important;
@@ -3261,25 +3278,33 @@ button {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    min-height: 52px !important;
+    min-height: 54px !important;
     padding: 10px 0 !important;
-    border-bottom: 1px solid rgba(138, 129, 120, 0.10) !important;
-    color: var(--ink, #1A1816) !important;
+    border-bottom: 1px solid rgba(138, 129, 120, 0.12) !important;
+    /* Text închis pe fundal luminos */
+    color: rgba(30, 24, 18, 0.92) !important;
     line-height: 1.2 !important;
     background: transparent !important;
     text-decoration: none !important;
     cursor: pointer !important;
+    /* CLICK ACTIV — critic */
     pointer-events: auto !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
     position: relative !important;
     z-index: 5 !important;
-    -webkit-tap-highlight-color: rgba(0,0,0,0.06) !important;
-    transition: opacity 0.15s ease !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.06) !important;
+    /* Doar opacity în tranziție */
+    transition: opacity 0.18s ease, color 0.18s ease !important;
     white-space: nowrap !important;
+    /* Touch target suficient */
+    touch-action: manipulation !important;
   }
   .nav__item::after  { display: none !important; }
   .nav__item::before { display: none !important; }
 
-  /* Opacitate progresivă: 100 → 40 → 10 */
+  /* Opacitate progresivă: 100 → 40 → 10
+     (JS updateFade() le suprascrie dinamic la scroll) */
   .nav__item:nth-child(1) { opacity: 1.00 !important; }
   .nav__item:nth-child(2) { opacity: 0.40 !important; }
   .nav__item:nth-child(3) { opacity: 0.10 !important; }
@@ -3288,54 +3313,59 @@ button {
   .nav__item:nth-child(6) { opacity: 0.10 !important; }
   .nav__item:nth-child(7) { opacity: 0.10 !important; }
 
+  /* Hover / tap — opac și mai întunecat */
   .nav__item:hover,
   .nav__item:active,
   .nav__item:focus {
     opacity: 1 !important;
-    color: var(--ink, #0A0908) !important;
+    color: #0A0908 !important;
   }
   .nav__item:active {
-    background: rgba(0,0,0,0.04) !important;
-    border-radius: 4px !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+    border-radius: 6px !important;
   }
 
-  /* Contact */
+  /* ── Contact ── */
   .nav__item--contact {
     font-family: var(--sans) !important;
     font-size: 9px !important;
     letter-spacing: 0.30em !important;
     text-transform: uppercase !important;
-    color: rgba(122, 115, 106, 0.80) !important;
+    color: rgba(90, 82, 72, 0.80) !important;
     padding: 10px 0 !important;
-    border-top: 1px solid rgba(138, 129, 120, 0.10) !important;
+    border-top: 1px solid rgba(138, 129, 120, 0.12) !important;
     border-bottom: none !important;
     margin-top: 6px !important;
     opacity: 0.85 !important;
     min-height: 48px !important;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
   }
   .nav__item--contact::after { display: none !important; }
   .nav__item--contact:hover,
   .nav__item--contact:active {
     opacity: 1 !important;
-    color: var(--ink, #1A1816) !important;
+    color: #1A1816 !important;
   }
 
-  /* Signature Series */
+  /* ── Signature Series ── */
   .nav__item--sig {
     font-family: var(--serif) !important;
     font-style: italic !important;
-    font-size: clamp(16px, 4vw, 22px) !important;
+    font-size: clamp(17px, 4.2vw, 22px) !important;
     font-weight: 400 !important;
     text-transform: none !important;
     color: #7A5F3A !important;
     background: transparent !important;
     border: none !important;
     border-top: 1px solid rgba(183, 158, 110, 0.22) !important;
-    padding: 10px 0 !important;
+    padding: 12px 0 !important;
     margin-top: 4px !important;
     margin-left: 0 !important;
     opacity: 1 !important;
-    min-height: 48px !important;
+    min-height: 50px !important;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
   }
   .nav__item--sig::before { display: none !important; }
   .nav__item--sig:hover,
@@ -3345,33 +3375,40 @@ button {
     background: transparent !important;
   }
 
-  /* Dark pages (fără .light-body) */
+  /* ── Pagini dark (index, signature-series — fără .light-body) ── */
   body:not(.light-body) .nav__panel {
-    background: rgba(12, 10, 8, 0.85) !important;
-    border-left-color: rgba(183, 174, 163, 0.08) !important;
-    border-bottom-color: rgba(183, 174, 163, 0.06) !important;
-    box-shadow: -6px 6px 40px rgba(0,0,0,0.55) !important;
+    /* Pe dark pages — panel semi-transparent luminos */
+    background: rgba(248, 244, 238, 0.94) !important;
+    border-left-color: rgba(183, 174, 163, 0.18) !important;
+    border-bottom-color: rgba(183, 174, 163, 0.12) !important;
+    box-shadow:
+      -8px 8px 40px rgba(0, 0, 0, 0.28),
+      inset 0 0 0 0.5px rgba(255,255,255,0.4) !important;
   }
   body:not(.light-body) .nav__panel::after {
-    background: linear-gradient(to top, rgba(12,10,8,0.92) 0%, transparent 100%) !important;
+    background: linear-gradient(
+      to top,
+      rgba(248, 244, 238, 0.98) 0%,
+      transparent 100%
+    ) !important;
   }
   body:not(.light-body) .nav__item {
-    color: rgba(236, 230, 221, 0.96) !important;
-    border-bottom-color: rgba(183, 174, 163, 0.08) !important;
-    -webkit-tap-highlight-color: rgba(255,255,255,0.06) !important;
+    color: rgba(30, 24, 18, 0.92) !important;
+    border-bottom-color: rgba(138, 129, 120, 0.12) !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.06) !important;
   }
   body:not(.light-body) .nav__item:hover,
   body:not(.light-body) .nav__item:active {
-    color: #fff !important;
-    background: rgba(255,255,255,0.05) !important;
+    color: #0A0908 !important;
+    background: rgba(0, 0, 0, 0.04) !important;
   }
   body:not(.light-body) .nav__item--contact {
-    color: rgba(183, 174, 163, 0.60) !important;
-    border-top-color: rgba(183, 174, 163, 0.08) !important;
+    color: rgba(90, 82, 72, 0.80) !important;
+    border-top-color: rgba(138, 129, 120, 0.12) !important;
   }
   body:not(.light-body) .nav__item--sig {
-    color: rgba(214, 196, 150, 0.90) !important;
-    border-top-color: rgba(183, 158, 110, 0.18) !important;
+    color: #7A5F3A !important;
+    border-top-color: rgba(183, 158, 110, 0.22) !important;
   }
 
   /* Burger deasupra tuturor */
