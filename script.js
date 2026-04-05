@@ -113,10 +113,14 @@ $$('[data-magnetic]').forEach(btn => {
   btn.addEventListener('mouseleave', () => { active=false; tx=0; ty=0; if (!rAF) rAF=requestAnimationFrame(tick); });
 });
 
-/* 11. MOBILE NAV — Floating Sidebar */
-const burgerBtn  = $('#navBurger');
-const navPanelEl = $('#navPanel');
-if (burgerBtn && navPanelEl) {
+/* 11. MOBILE NAV — Floating Sidebar cu scroll fade */
+(function() {
+  const burgerBtn  = document.getElementById('navBurger');
+  const navPanelEl = document.getElementById('navPanel');
+  const menuScroll = document.getElementById('menuScroll');
+  if (!burgerBtn || !navPanelEl) return;
+
+  /* Backdrop — creat o singură dată dacă nu există deja în HTML */
   let backdropEl = document.getElementById('navBackdrop');
   if (!backdropEl) {
     backdropEl = document.createElement('div');
@@ -125,6 +129,26 @@ if (burgerBtn && navPanelEl) {
     backdropEl.setAttribute('aria-hidden', 'true');
     document.body.appendChild(backdropEl);
   }
+
+  /* Items din menu-scroll (pentru fade) */
+  const items = menuScroll ? Array.from(menuScroll.querySelectorAll('.nav__item')) : [];
+  const opacities = [1, 0.40, 0.10];
+
+  /* Actualizează opacitățile în funcție de poziția scroll */
+  function updateFade() {
+    if (!menuScroll) return;
+    const containerTop = menuScroll.getBoundingClientRect().top;
+    let closestIdx = 0, closestDist = Infinity;
+    items.forEach((item, i) => {
+      const dist = Math.abs(item.getBoundingClientRect().top - containerTop);
+      if (dist < closestDist) { closestDist = dist; closestIdx = i; }
+    });
+    items.forEach((item, i) => {
+      const delta = i - closestIdx;
+      item.style.opacity = opacities[Math.min(Math.abs(delta), opacities.length - 1)];
+    });
+  }
+
   function openNav() {
     navPanelEl.classList.add('open');
     backdropEl.classList.add('open');
@@ -132,7 +156,11 @@ if (burgerBtn && navPanelEl) {
     burgerBtn.setAttribute('aria-label', 'Close menu');
     navPanelEl.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    /* Reset scroll și aplică fade la deschidere */
+    if (menuScroll) menuScroll.scrollTop = 0;
+    setTimeout(updateFade, 50);
   }
+
   function closeNav() {
     navPanelEl.classList.remove('open');
     backdropEl.classList.remove('open');
@@ -141,11 +169,22 @@ if (burgerBtn && navPanelEl) {
     navPanelEl.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
+
   burgerBtn.addEventListener('click', () => navPanelEl.classList.contains('open') ? closeNav() : openNav());
   backdropEl.addEventListener('click', closeNav);
-  $$('a', navPanelEl).forEach(a => a.addEventListener('click', closeNav));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && navPanelEl.classList.contains('open')) { closeNav(); burgerBtn.focus(); } });
-}
+
+  /* Scroll listener pe menu-scroll interior */
+  if (menuScroll) {
+    menuScroll.addEventListener('scroll', updateFade, { passive: true });
+  }
+
+  /* Click pe link → închide */
+  items.forEach(a => { if (a.tagName === 'A') a.addEventListener('click', closeNav); });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navPanelEl.classList.contains('open')) { closeNav(); burgerBtn.focus(); }
+  });
+})();
 
 /* 12. FORM */
 const FORMSPREE = 'https://formspree.io/f/mkoqvqbw';
