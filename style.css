@@ -3194,7 +3194,8 @@ button {
     border-right: none !important;
     border-radius: 0 !important;
     box-shadow: -8px 0 32px rgba(0,0,0,0.45) !important;
-    overflow: hidden !important;
+    /* CRITIC: visible permite scroll pe iOS */
+    overflow: visible !important;
     z-index: 9995 !important;
     pointer-events: none !important;
     transform: translateX(100%) !important;
@@ -3226,10 +3227,12 @@ button {
     flex-direction: column !important;
     align-items: flex-end !important;
     width: 100% !important;
-    height: 100% !important;
+    /* CRITIC: 100vh + max-height pentru scroll iOS */
+    height: 100vh !important;
+    max-height: 100vh !important;
     padding-top: calc(var(--nav-h, 64px) + 28px) !important;
     padding-right: 28px !important;
-    padding-bottom: 60px !important;
+    padding-bottom: 80px !important;
     padding-left: 12px !important;
     box-sizing: border-box !important;
     overflow-y: auto !important;
