@@ -10,7 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;1,200;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    body { background: var(--ivory-2); color: var(--ink); }
+    /* ══ FIX SCROLL — body nu are overflow:hidden pe pagini secundare ══ */
+    body {
+      background: var(--ivory-2);
+      color: var(--ink);
+      overflow: auto !important; /* suprascrie orice overflow:hidden din script.js */
+    }
 
     /* Nav forțat pe light imediat */
     .nav {
@@ -145,9 +150,173 @@
       letter-spacing: 0.01em;
     }
     .testi-cta .link-arrow { margin-top: 0; }
+
+    /* ══ NAV MOBIL — același stil transparent ca gallery ══ */
+    @media (max-width: 900px) {
+      .nav__panel,
+      .nav__panel.open {
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        left: auto !important;
+        bottom: auto !important;
+        width: 62vw !important;
+        max-width: 280px !important;
+        height: auto !important;
+        max-height: 72vh !important;
+        background: rgba(246, 243, 238, 0.08) !important;
+        backdrop-filter: blur(2px) !important;
+        -webkit-backdrop-filter: blur(2px) !important;
+        border-left: 1px solid rgba(44, 40, 32, 0.10) !important;
+        border-bottom: 1px solid rgba(44, 40, 32, 0.08) !important;
+        border-top: none !important;
+        border-right: none !important;
+        border-radius: 0 0 0 16px !important;
+        box-shadow: -4px 8px 32px rgba(8, 7, 6, 0.12) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        justify-content: flex-start !important;
+        padding: calc(var(--nav-h, 64px) + 20px) 28px 32px 16px !important;
+        gap: 0 !important;
+        overflow: hidden !important;
+        z-index: 9999 !important;
+        pointer-events: none !important;
+        transform: translateX(110%) !important;
+        opacity: 0 !important;
+        transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+                    opacity 0.22s ease !important;
+      }
+
+      .nav__panel.open {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        pointer-events: all !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+      }
+      .nav__panel.open::-webkit-scrollbar { display: none !important; }
+
+      .nav__panel.open::after {
+        content: '' !important;
+        position: sticky !important;
+        bottom: 0 !important;
+        display: block !important;
+        height: 40px !important;
+        min-height: 40px !important;
+        background: linear-gradient(to top, rgba(246,243,238,0.08) 0%, transparent 100%) !important;
+        pointer-events: none !important;
+        margin-top: auto !important;
+      }
+
+      /* Link-uri — dark pe fond light, halo light în spate */
+      .nav__item {
+        font-family: var(--serif) !important;
+        font-weight: 300 !important;
+        font-size: clamp(20px, 5vw, 26px) !important;
+        letter-spacing: 0.01em !important;
+        text-transform: none !important;
+        text-align: right !important;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        min-height: 44px !important;
+        padding: 10px 0 !important;
+        border-bottom: 1px solid rgba(44, 40, 32, 0.08) !important;
+        /* Text dark pe pagina light, cu halo ivory */
+        color: #1A1816 !important;
+        text-shadow:
+          0 0 20px rgba(246,243,238,0.98),
+          0 0 10px rgba(246,243,238,0.95),
+          0 0 6px  rgba(246,243,238,0.90) !important;
+        background: transparent !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        pointer-events: all !important;
+        position: relative !important;
+        z-index: 10 !important;
+        transition: opacity 0.18s ease, color 0.18s ease !important;
+      }
+      .nav__item::after  { display: none !important; }
+      .nav__item::before { display: none !important; }
+
+      .nav__item:nth-child(1) { opacity: 1.00 !important; }
+      .nav__item:nth-child(2) { opacity: 0.55 !important; }
+      .nav__item:nth-child(3) { opacity: 0.30 !important; }
+      .nav__item:nth-child(4) { opacity: 0.16 !important; }
+      .nav__item:nth-child(5) { opacity: 0.10 !important; }
+      .nav__item:nth-child(6) { opacity: 0.06 !important; }
+      .nav__item:nth-child(7) { opacity: 0.04 !important; }
+
+      .nav__item:hover,
+      .nav__item:active,
+      .nav__item:focus {
+        opacity: 1 !important;
+        color: #0A0908 !important;
+      }
+      .nav__item:active {
+        background: rgba(44,40,32,0.05) !important;
+        border-radius: 4px !important;
+      }
+
+      .nav__item--contact {
+        font-family: var(--sans) !important;
+        font-size: 9px !important;
+        letter-spacing: 0.30em !important;
+        text-transform: uppercase !important;
+        color: rgba(100, 90, 78, 0.80) !important;
+        padding: 10px 0 4px !important;
+        border-top: 1px solid rgba(44,40,32,0.08) !important;
+        border-bottom: none !important;
+        margin-top: 4px !important;
+        opacity: 0.85 !important;
+        pointer-events: all !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        text-shadow: none !important;
+      }
+      .nav__item--contact::after { display: none !important; }
+      .nav__item--contact:hover,
+      .nav__item--contact:active { opacity: 1 !important; color: #1A1816 !important; }
+
+      .nav__item--sig {
+        font-family: var(--serif) !important;
+        font-style: italic !important;
+        font-size: clamp(15px, 3.8vw, 20px) !important;
+        font-weight: 400 !important;
+        text-transform: none !important;
+        color: #7A5F3A !important;
+        background: transparent !important;
+        border: none !important;
+        border-top: 1px solid rgba(183,158,110,0.20) !important;
+        border-bottom: none !important;
+        padding: 10px 0 0 !important;
+        margin-top: 4px !important;
+        opacity: 1 !important;
+        pointer-events: all !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        text-shadow: none !important;
+      }
+      .nav__item--sig::before { display: none !important; }
+      .nav__item--sig:hover,
+      .nav__item--sig:active { color: #5A4028 !important; opacity: 1 !important; }
+
+      .nav__burger {
+        position: relative !important;
+        z-index: 10000 !important;
+      }
+    }
   </style>
 </head>
-<body>
+<body class="light-body">
 
   <div class="progress" id="progress" aria-hidden="true"></div>
   <div class="cursor" id="cursor" aria-hidden="true">
@@ -155,7 +324,7 @@
     <div class="cursor__dot"></div>
   </div>
 
-  <!-- ══ NAV — ordine corecta: fara Who We Are, Contact penultimul, Signature ultimul ══ -->
+  <!-- ══ NAV ══ -->
   <nav class="nav on-light" id="nav" aria-label="Primary">
     <a href="index.html#who-we-are" class="nav__wordmark" aria-label="Deco Preda home">
       DECO<span class="nav__wordmark-thin">PREDA</span>
@@ -173,6 +342,9 @@
       <a href="signature-series.html" class="nav__item nav__item--sig" data-cursor="link" aria-label="Signature Series — exclusive commissions only">Signature Series</a>
     </div>
   </nav>
+
+  <!-- ══ BACKDROP NAV ══ -->
+  <div class="nav__backdrop" id="navBackdrop" aria-hidden="true"></div>
 
   <main>
 
@@ -292,9 +464,68 @@
   <script>
   (function() {
     'use strict';
-    const yr = document.getElementById('yr');
-    if (yr) yr.textContent = new Date().getFullYear();
 
+    /* ══ FIX SCROLL PRINCIPAL ══
+       script.js blochează body.overflow la init și îl eliberează în
+       dismissLoader — care verifică dacă loaderul există și nu e 'out'.
+       Pe pagini secundare .loader e display:none deci dismissLoader
+       nu detectează că poate continua.
+       Soluție: simulăm că loaderul a dispărut deja adăugând clasa 'out',
+       astfel dismissLoader() se execută corect la window 'load'. */
+    const _loaderEl = document.getElementById('loader');
+    if (_loaderEl) {
+      _loaderEl.classList.add('out');
+    }
+    /* Fallback de siguranță după 200ms — după ce script.js și-a rulat toți timerii */
+    setTimeout(function() {
+      if (document.body.style.overflow === 'hidden') {
+        document.body.style.overflow = '';
+      }
+    }, 300);
+
+    /* ══ NAV MOBIL — identic cu gallery.html ══ */
+    const burger   = document.getElementById('navBurger');
+    const panel    = document.getElementById('navPanel');
+    const backdrop = document.getElementById('navBackdrop');
+
+    if (burger && panel) {
+      function openNav() {
+        panel.classList.add('open');
+        panel.setAttribute('aria-hidden', 'false');
+        burger.setAttribute('aria-expanded', 'true');
+        burger.setAttribute('aria-label', 'Close menu');
+        if (backdrop) backdrop.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeNav() {
+        panel.classList.remove('open');
+        panel.setAttribute('aria-hidden', 'true');
+        burger.setAttribute('aria-expanded', 'false');
+        burger.setAttribute('aria-label', 'Open menu');
+        if (backdrop) backdrop.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      /* Suprascrie event listener-ul din script.js pentru burger */
+      const newBurger = burger.cloneNode(true);
+      burger.parentNode.replaceChild(newBurger, burger);
+
+      newBurger.addEventListener('click', () =>
+        panel.classList.contains('open') ? closeNav() : openNav()
+      );
+      if (backdrop) backdrop.addEventListener('click', closeNav);
+      Array.from(panel.querySelectorAll('a')).forEach(a =>
+        a.addEventListener('click', closeNav)
+      );
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && panel.classList.contains('open')) {
+          closeNav();
+          newBurger.focus();
+        }
+      });
+    }
+
+    /* ══ PROGRESS BAR ══ */
     const prog = document.getElementById('progress');
     function updateProg() {
       if (!prog) return;
@@ -303,6 +534,7 @@
     }
     window.addEventListener('scroll', updateProg, { passive: true });
 
+    /* ══ REVEAL TESTIMONIALE ══ */
     const items = document.querySelectorAll('.testi-item');
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
@@ -317,6 +549,11 @@
     } else {
       items.forEach(el => el.classList.add('in'));
     }
+
+    /* ══ AN FOOTER ══ */
+    const yr = document.getElementById('yr');
+    if (yr) yr.textContent = new Date().getFullYear();
+
   })();
   </script>
 </body>
