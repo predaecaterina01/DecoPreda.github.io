@@ -28,6 +28,7 @@ if (loaderEl) {
   setTimeout(dismissLoader, 3500);
 } else {
   document.body.style.overflow = '';
+  setTimeout(revealHero, 100);
 }
 
 /* 2. HERO REVEAL */
