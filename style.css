@@ -4226,8 +4226,8 @@ button {
   .nav__backdrop { display: none !important; }
 }
 /* ════════════════════════════════════════════════════════════
-   MOBILE NAV SIDEBAR v3
-   Adaugă la SFÂRȘITUL style.css
+   MOBILE NAV SIDEBAR — FIX COMPLET
+   Înlocuiește blocul anterior din style.css
    ════════════════════════════════════════════════════════════ */
 
 .nav__backdrop {
@@ -4248,58 +4248,91 @@ button {
 
 @media (max-width: 900px) {
 
-  .nav__panel,
-  .nav__panel.open {
+  /* ── PANEL CLOSED ── */
+  .nav__panel {
     position: fixed !important;
     top: 0 !important;
     right: 0 !important;
     left: auto !important;
     bottom: auto !important;
+
     width: 62vw !important;
     max-width: 280px !important;
+
+    /* FIX 1: înălțime suficientă să cuprindă toate link-urile */
     height: auto !important;
-    max-height: calc(var(--nav-h) + 210px) !important;
+    max-height: 72vh !important;
+
+    /* FIX 2: overflow-y scroll în loc de hidden */
+    overflow: hidden !important;        /* hidden pe closed, ca să nu pâlpâie */
+    overflow-x: hidden !important;
+
     background: rgba(255, 255, 255, 0.28) !important;
     backdrop-filter: blur(24px) saturate(1.8) brightness(1.05) !important;
     -webkit-backdrop-filter: blur(24px) saturate(1.8) brightness(1.05) !important;
+
     border-left: 1px solid rgba(255, 255, 255, 0.45) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.35) !important;
     border-top: none !important;
     border-right: none !important;
     border-radius: 0 0 0 16px !important;
     box-shadow: -4px 4px 28px rgba(8, 7, 6, 0.10) !important;
+
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-end !important;
     justify-content: flex-start !important;
-    padding: calc(var(--nav-h) + 20px) 28px 24px 16px !important;
+
+    padding: calc(var(--nav-h, 64px) + 20px) 28px 32px 16px !important;
     gap: 0 !important;
-    overflow: hidden !important;
+
     z-index: 9999 !important;
+
+    /* FIX 3: pointer-events none pe closed */
+    pointer-events: none !important;
+
     transform: translateX(110%) !important;
     opacity: 0 !important;
-    pointer-events: none !important;
-    transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease !important;
+    transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.22s ease !important;
   }
 
+  /* ── PANEL OPEN ── */
   .nav__panel.open {
     transform: translateX(0) !important;
     opacity: 1 !important;
+
+    /* FIX 4: pointer-events all NUMAI când e deschis */
     pointer-events: all !important;
+
+    /* FIX 5: overflow-y auto când e deschis, ca să poată scrolla */
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    /* scrollbar invizibil */
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  .nav__panel.open::-webkit-scrollbar {
+    display: none !important;
   }
 
+  /* Fade gradient jos — scroll hint vizual */
   .nav__panel.open::after {
     content: '' !important;
-    position: absolute !important;
+    position: sticky !important;
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    height: 64px !important;
-    background: linear-gradient(to top, rgba(255,255,255,0.55) 0%, transparent 100%) !important;
+    display: block !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    background: linear-gradient(to top, rgba(255,255,255,0.60) 0%, transparent 100%) !important;
     pointer-events: none !important;
-    z-index: 2 !important;
+    margin-top: auto !important;
   }
 
+  /* ── LINK-URI ── */
   .nav__item {
     font-family: var(--serif) !important;
     font-weight: 300 !important;
@@ -4316,14 +4349,25 @@ button {
     background: transparent !important;
     text-decoration: none !important;
     cursor: pointer !important;
+
+    /* FIX 6: pointer-events explicit all — moștenirea de pe panel nu le blochează */
     pointer-events: all !important;
+
     position: relative !important;
     z-index: 10 !important;
     transition: opacity 0.18s ease, color 0.18s ease !important;
+
+    /* Tap target minim pentru mobile */
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
   }
+
   .nav__item::after  { display: none !important; }
   .nav__item::before { display: none !important; }
 
+  /* Opacitate progresivă */
   .nav__item:nth-child(1) { opacity: 1.00 !important; }
   .nav__item:nth-child(2) { opacity: 0.52 !important; }
   .nav__item:nth-child(3) { opacity: 0.28 !important; }
@@ -4339,6 +4383,15 @@ button {
     color: #0A0908 !important;
   }
 
+  /* FIX 7: tap pe mobile — :active pentru feedback vizual imediat */
+  .nav__item:active {
+    opacity: 1 !important;
+    color: #0A0908 !important;
+    background: rgba(0,0,0,0.04) !important;
+    border-radius: 4px !important;
+  }
+
+  /* ── CONTACT (sans-serif mic) ── */
   .nav__item--contact {
     font-family: var(--sans) !important;
     font-size: 9px !important;
@@ -4353,10 +4406,16 @@ button {
     pointer-events: all !important;
     z-index: 10 !important;
     position: relative !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
   }
   .nav__item--contact::after { display: none !important; }
-  .nav__item--contact:hover  { opacity: 1 !important; color: #1A1816 !important; }
+  .nav__item--contact:hover,
+  .nav__item--contact:active { opacity: 1 !important; color: #1A1816 !important; }
 
+  /* ── SIGNATURE SERIES ── */
   .nav__item--sig {
     font-family: var(--serif) !important;
     font-style: italic !important;
@@ -4374,13 +4433,21 @@ button {
     pointer-events: all !important;
     z-index: 10 !important;
     position: relative !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
   }
   .nav__item--sig::before { display: none !important; }
-  .nav__item--sig:hover   { color: #5A4028 !important; }
+  .nav__item--sig:hover,
+  .nav__item--sig:active   { color: #5A4028 !important; opacity: 1 !important; }
 
-  body:not(.light-body) .nav__panel,
-  body:not(.light-body) .nav__panel.open {
-    background: rgba(10, 9, 8, 0.55) !important;
+  /* ════════════════════════════════
+     DARK PAGE VARIANT
+     (când body NU are .light-body)
+     ════════════════════════════════ */
+  body:not(.light-body) .nav__panel {
+    background: rgba(10, 9, 8, 0.62) !important;
     border-left-color: rgba(255,255,255,0.08) !important;
     border-bottom-color: rgba(255,255,255,0.06) !important;
   }
@@ -4388,13 +4455,22 @@ button {
     color: rgba(236, 230, 221, 0.95) !important;
     border-bottom-color: rgba(183,174,163,0.08) !important;
   }
-  body:not(.light-body) .nav__item:hover { color: #fff !important; }
-  body:not(.light-body) .nav__item--contact { color: rgba(183,174,163,0.55) !important; }
-  body:not(.light-body) .nav__item--sig { color: rgba(214,196,150,0.88) !important; }
+  body:not(.light-body) .nav__item:hover,
+  body:not(.light-body) .nav__item:active {
+    color: #fff !important;
+    background: rgba(255,255,255,0.04) !important;
+  }
+  body:not(.light-body) .nav__item--contact {
+    color: rgba(183,174,163,0.55) !important;
+  }
+  body:not(.light-body) .nav__item--sig {
+    color: rgba(214,196,150,0.88) !important;
+  }
   body:not(.light-body) .nav__panel.open::after {
-    background: linear-gradient(to top, rgba(10,9,8,0.65) 0%, transparent 100%) !important;
+    background: linear-gradient(to top, rgba(10,9,8,0.70) 0%, transparent 100%) !important;
   }
 
+  /* ── BURGER deasupra oricărui element ── */
   .nav__burger {
     position: relative !important;
     z-index: 10000 !important;
@@ -4403,4 +4479,20 @@ button {
 
 @media (min-width: 901px) {
   .nav__backdrop { display: none !important; }
+  .nav__panel {
+    /* resetează tot ce-am setat pe mobile */
+    position: static !important;
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: all !important;
+    overflow: visible !important;
+    max-height: none !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
 }
