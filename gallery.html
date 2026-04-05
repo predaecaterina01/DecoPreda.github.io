@@ -19,8 +19,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;1,200;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    body { cursor: auto; }
-    a, button { cursor: auto; }
+    /* ══════════════════════════════════════════════════════
+       FIX 1 — CURSOR
+       NU suprascriem cursor-ul custom din script.js
+       Scoatem cursor:auto de pe body și butoane
+       ══════════════════════════════════════════════════════ */
+    /* body { cursor: auto; }   ← ȘTERS — cauza problemei */
+    /* a, button { cursor: auto; } ← ȘTERS */
 
     /* ── Gallery page ── */
     .gal-page {
@@ -122,11 +127,9 @@
       transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .gal-item:hover .gal-swatch { transform: scale(1.04); }
-    /* ── Overlay: gradient permanent jos — text ÎNTOTDEAUNA vizibil ── */
     .gal-item__over {
       position: absolute;
       inset: 0;
-      /* Gradient permanent, nu doar la hover */
       background: linear-gradient(
         to top,
         rgba(8, 7, 6, 0.82) 0%,
@@ -148,8 +151,6 @@
         transparent 86%
       );
     }
-
-    /* Titlul — alb clar, mereu vizibil */
     .gal-item__name {
       font-family: var(--sans);
       font-weight: 400;
@@ -157,13 +158,9 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: rgba(236, 230, 221, 0.96);
-      text-shadow:
-        0 1px 5px rgba(0,0,0,0.95),
-        0 2px 14px rgba(0,0,0,0.75);
+      text-shadow: 0 1px 5px rgba(0,0,0,0.95), 0 2px 14px rgba(0,0,0,0.75);
       line-height: 1.4;
     }
-
-    /* Subtitlul — ivory cald, clar */
     .gal-item__mat {
       font-family: var(--sans);
       font-weight: 300;
@@ -171,14 +168,10 @@
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: rgba(214, 204, 192, 0.90);
-      text-shadow:
-        0 1px 4px rgba(0,0,0,0.90),
-        0 2px 10px rgba(0,0,0,0.70);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.90), 0 2px 10px rgba(0,0,0,0.70);
       margin-top: 3px;
       line-height: 1.4;
     }
-
-    /* Expand icon — mereu ușor vizibil */
     .gal-item__expand {
       position: absolute;
       top: 12px; right: 12px;
@@ -211,16 +204,211 @@
     @media (max-width: 900px) { .gal-grid { columns: 2; } }
     @media (max-width: 500px) { .gal-grid { columns: 1; } }
 
-    /* ════════════════════════════════════════════════════
-       LIGHTBOX — redesign complet pentru mobile
-       Strategie:
-       - Overlay = backdrop dark, pointer-events:all
-       - .lb-stage = container centrat cu max-width
-       - .lb-img-wrap = relativ, contine imaginea + X + meta
-       - X = absolut colț dreapta-sus AL IMAGINII (nu al ecranului)
-       - Săgeți = fix pe ecran, centrate vertical, cu voal
-       ════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════
+       FIX 2 — NAV MOBIL: fundal aproape transparent
+       Panelul = complet transparent
+       Zona de text = pseudo-element opac doar în spate
+       ══════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
 
+      /* Panel: sticlă ultra-fină, aproape invizibilă */
+      .nav__panel,
+      .nav__panel.open {
+        /* FIX SCROLL + CLICK — reproduce fix-urile din nav-mobile-fix.css */
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        left: auto !important;
+        bottom: auto !important;
+        width: 62vw !important;
+        max-width: 280px !important;
+        height: auto !important;
+        max-height: 72vh !important;
+
+        /* Fundal aproape transparent — doar un blur subtil */
+        background: rgba(255, 255, 255, 0.06) !important;
+        backdrop-filter: blur(2px) !important;
+        -webkit-backdrop-filter: blur(2px) !important;
+
+        border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+        border-top: none !important;
+        border-right: none !important;
+        border-radius: 0 0 0 16px !important;
+        box-shadow: -4px 8px 32px rgba(8, 7, 6, 0.18) !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        justify-content: flex-start !important;
+        padding: calc(var(--nav-h, 64px) + 20px) 28px 32px 16px !important;
+        gap: 0 !important;
+        overflow: hidden !important;
+        z-index: 9999 !important;
+
+        pointer-events: none !important;
+        transform: translateX(110%) !important;
+        opacity: 0 !important;
+        transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+                    opacity 0.22s ease !important;
+      }
+
+      .nav__panel.open {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        pointer-events: all !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+      }
+      .nav__panel.open::-webkit-scrollbar { display: none !important; }
+
+      /* Gradient fade jos — scroll hint */
+      .nav__panel.open::after {
+        content: '' !important;
+        position: sticky !important;
+        bottom: 0 !important;
+        display: block !important;
+        height: 40px !important;
+        min-height: 40px !important;
+        background: linear-gradient(to top, rgba(255,255,255,0.08) 0%, transparent 100%) !important;
+        pointer-events: none !important;
+        margin-top: auto !important;
+      }
+
+      /* Link-uri: background local opac — "halo" în spatele textului */
+      .nav__item {
+        font-family: var(--serif) !important;
+        font-weight: 300 !important;
+        font-size: clamp(20px, 5vw, 26px) !important;
+        letter-spacing: 0.01em !important;
+        text-transform: none !important;
+        text-align: right !important;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        min-height: 44px !important;
+        padding: 10px 0 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        color: #fff !important;
+
+        /* Halo opac LOCAL pe fiecare rând de text */
+        text-shadow:
+          0 0 18px rgba(0,0,0,0.9),
+          0 0 8px  rgba(0,0,0,0.8),
+          0 1px 4px rgba(0,0,0,0.95) !important;
+
+        background: transparent !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        pointer-events: all !important;
+        position: relative !important;
+        z-index: 10 !important;
+        transition: opacity 0.18s ease, color 0.18s ease !important;
+      }
+      .nav__item::after  { display: none !important; }
+      .nav__item::before { display: none !important; }
+
+      /* Opacitate progresivă */
+      .nav__item:nth-child(1) { opacity: 1.00 !important; }
+      .nav__item:nth-child(2) { opacity: 0.55 !important; }
+      .nav__item:nth-child(3) { opacity: 0.30 !important; }
+      .nav__item:nth-child(4) { opacity: 0.16 !important; }
+      .nav__item:nth-child(5) { opacity: 0.10 !important; }
+      .nav__item:nth-child(6) { opacity: 0.06 !important; }
+      .nav__item:nth-child(7) { opacity: 0.04 !important; }
+
+      .nav__item:hover,
+      .nav__item:active,
+      .nav__item:focus {
+        opacity: 1 !important;
+        color: #fff !important;
+      }
+      .nav__item:active {
+        background: rgba(255,255,255,0.06) !important;
+        border-radius: 4px !important;
+      }
+
+      /* Contact */
+      .nav__item--contact {
+        font-family: var(--sans) !important;
+        font-size: 9px !important;
+        letter-spacing: 0.30em !important;
+        text-transform: uppercase !important;
+        color: rgba(230, 220, 205, 0.80) !important;
+        padding: 10px 0 4px !important;
+        border-top: 1px solid rgba(255,255,255,0.08) !important;
+        border-bottom: none !important;
+        margin-top: 4px !important;
+        opacity: 0.85 !important;
+        pointer-events: all !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+      }
+      .nav__item--contact::after { display: none !important; }
+      .nav__item--contact:hover,
+      .nav__item--contact:active { opacity: 1 !important; color: #fff !important; }
+
+      /* Signature Series */
+      .nav__item--sig {
+        font-family: var(--serif) !important;
+        font-style: italic !important;
+        font-size: clamp(15px, 3.8vw, 20px) !important;
+        font-weight: 400 !important;
+        text-transform: none !important;
+        color: rgba(214,196,150,0.95) !important;
+        background: transparent !important;
+        border: none !important;
+        border-top: 1px solid rgba(183,158,110,0.20) !important;
+        border-bottom: none !important;
+        padding: 10px 0 0 !important;
+        margin-top: 4px !important;
+        opacity: 1 !important;
+        pointer-events: all !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+      }
+      .nav__item--sig::before { display: none !important; }
+      .nav__item--sig:hover,
+      .nav__item--sig:active { color: #E8C98A !important; opacity: 1 !important; }
+
+      /* Pe paginile light (.light-body) — text dark cu halo light */
+      body.light-body .nav__item {
+        color: #1A1816 !important;
+        text-shadow:
+          0 0 16px rgba(245,240,232,0.95),
+          0 0 8px  rgba(245,240,232,0.90),
+          0 1px 4px rgba(245,240,232,0.85) !important;
+        border-bottom-color: rgba(0,0,0,0.08) !important;
+      }
+      body.light-body .nav__item:hover,
+      body.light-body .nav__item:active { color: #0A0908 !important; }
+      body.light-body .nav__item--contact {
+        color: rgba(100, 90, 78, 0.80) !important;
+      }
+      body.light-body .nav__item--sig {
+        color: #7A5F3A !important;
+      }
+      body.light-body .nav__panel,
+      body.light-body .nav__panel.open {
+        background: rgba(245,240,232,0.06) !important;
+        border-left-color: rgba(0,0,0,0.08) !important;
+        border-bottom-color: rgba(0,0,0,0.06) !important;
+      }
+
+      .nav__burger {
+        position: relative !important;
+        z-index: 10000 !important;
+      }
+    }
+
+    /* ══ LIGHTBOX ══ */
     .lightbox {
       position: fixed;
       inset: 0;
@@ -231,15 +419,12 @@
       justify-content: center;
       pointer-events: none;
       transition: background 0.4s ease;
-      /* Padding = spatiu pentru sageti stanga/dreapta */
       padding: 0 68px;
     }
     .lightbox.open {
       background: rgba(10, 9, 8, 0.95);
       pointer-events: all;
     }
-
-    /* Stage — containerul principal, se scalează cu imaginea */
     .lb-stage {
       position: relative;
       max-width: min(860px, 100%);
@@ -249,14 +434,11 @@
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
     .lightbox.open .lb-stage { opacity: 1; transform: scale(1); }
-
-    /* Wrapper imagine — position:relative pentru X */
     .lb-img-wrap {
       position: relative;
       width: 100%;
-      line-height: 0; /* elimina spatiu sub imagine */
+      line-height: 0;
     }
-
     .lb-surface {
       display: block;
       width: 100%;
@@ -264,11 +446,6 @@
       object-fit: contain;
       border: none;
     }
-
-    /* ── X — colț dreapta-sus AL IMAGINII ──
-       position:absolute față de .lb-img-wrap.
-       Pe mobile: se vede clar pe colțul imaginii,
-       nu se suprapune cu nav-ul (care e sus la z-index:1000). */
     .lb-close {
       position: absolute;
       top: 10px;
@@ -278,7 +455,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Voal dark pentru vizibilitate pe orice imagine */
       background: rgba(10, 9, 8, 0.72);
       border: 1px solid rgba(236, 230, 221, 0.45);
       border-radius: 50%;
@@ -286,7 +462,6 @@
       cursor: pointer;
       z-index: 10;
       transition: background 0.2s, border-color 0.2s, color 0.2s;
-      /* Touch target minim 44px */
       -webkit-tap-highlight-color: transparent;
     }
     .lb-close:hover,
@@ -295,8 +470,6 @@
       border-color: rgba(236, 230, 221, 0.80);
       color: #fff;
     }
-
-    /* ── Meta (titlu + material) — sub imagine ── */
     .lb-meta {
       display: flex;
       align-items: baseline;
@@ -304,30 +477,23 @@
       gap: 16px;
       padding: 14px 0 0;
     }
-
     .lb-name {
       font-family: var(--serif);
       font-weight: 300;
       font-size: clamp(18px, 2.2vw, 26px);
-      /* Culoare clară pe fond dark */
       color: rgba(236, 230, 221, 0.96);
       line-height: 1.2;
     }
-
-    /* Subtitlul (material · locatie) — vizibil clar */
     .lb-mat {
       font-family: var(--sans);
       font-weight: 300;
       font-size: clamp(10px, 1.1vw, 12px);
       letter-spacing: 0.28em;
       text-transform: uppercase;
-      /* Aceeași culoare clară, nu mai e transparent */
       color: rgba(214, 204, 192, 0.88);
       flex-shrink: 0;
       line-height: 1.4;
     }
-
-    /* Counter */
     .lb-counter {
       display: block;
       text-align: center;
@@ -338,10 +504,6 @@
       letter-spacing: 0.28em;
       color: rgba(183, 174, 163, 0.50);
     }
-
-    /* ── SĂGEȚI — fixed pe ecran, centrate vertical ──
-       Voal dark pentru vizibilitate garantată pe orice imagine.
-       Z-index mai mare decât nav (1000) → 9600. */
     .lb-nav {
       position: fixed;
       top: 50%;
@@ -351,19 +513,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Voal dark vizibil */
       background: rgba(10, 9, 8, 0.70);
       border: 1px solid rgba(183, 174, 163, 0.55);
       border-radius: 50%;
       color: rgba(236, 230, 221, 0.95);
       cursor: pointer;
       z-index: 9600;
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
-      -webkit-tap-highlight-color: transparent;
-      /* Ascunse când lightbox e închis */
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s ease, background 0.2s, border-color 0.2s;
+      -webkit-tap-highlight-color: transparent;
     }
     .lightbox.open .lb-nav {
       opacity: 1;
@@ -377,33 +536,24 @@
     }
     .lb-prev { left: 12px; }
     .lb-next { right: 12px; }
-
-    /* Mobile: săgeți mai mici, mai aproape de margine */
     @media (max-width: 600px) {
       .lightbox { padding: 0 52px; }
-      .lb-nav {
-        width: 40px;
-        height: 40px;
-      }
+      .lb-nav { width: 40px; height: 40px; }
       .lb-prev { left: 6px; }
       .lb-next { right: 6px; }
-      .lb-close {
-        top: 8px;
-        right: 8px;
-        width: 36px;
-        height: 36px;
-      }
-      .lb-name {
-        font-size: clamp(16px, 4vw, 20px);
-      }
-      .lb-mat {
-        font-size: 9px;
-        letter-spacing: 0.20em;
-      }
+      .lb-close { top: 8px; right: 8px; width: 36px; height: 36px; }
+      .lb-name { font-size: clamp(16px, 4vw, 20px); }
+      .lb-mat { font-size: 9px; letter-spacing: 0.20em; }
     }
   </style>
 </head>
-<body>
+<body class="light-body">
+
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor__ring"></div>
+    <div class="cursor__dot"></div>
+  </div>
+
 
   <!-- ══ NAV ══ -->
   <nav class="nav on-light" id="nav" aria-label="Primary">
@@ -453,23 +603,8 @@
     </div>
   </main>
 
-  <!-- ══ LIGHTBOX ══
-       Structura:
-       .lightbox (backdrop, fixed inset:0)
-         .lb-nav.lb-prev (fixed, z:9600)
-         .lb-nav.lb-next (fixed, z:9600)
-         .lb-stage (container centrat)
-           .lb-img-wrap (position:relative)
-             img.lb-surface
-             button.lb-close (absolut colț dreapta-sus)
-           .lb-meta
-             span.lb-name
-             span.lb-mat
-           span.lb-counter
-  ══ -->
+  <!-- ══ LIGHTBOX ══ -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image detail view" aria-hidden="true">
-
-    <!-- Săgeți: fixed față de viewport, z > nav -->
     <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous image">
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
         <path d="M11 4L6 9L11 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -480,13 +615,8 @@
         <path d="M7 4L12 9L7 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </button>
-
-    <!-- Stage -->
     <div class="lb-stage" id="lbStage">
-
-      <!-- Imagine + X -->
       <div class="lb-img-wrap" id="lbImgWrap">
-        <!-- X: absolut față de .lb-img-wrap, colț dreapta-sus -->
         <button class="lb-close" id="lbClose" aria-label="Close">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
@@ -494,18 +624,17 @@
         </button>
         <img class="lb-surface" id="lbSurface" src="" alt="" />
       </div>
-
-      <!-- Meta -->
       <div class="lb-meta">
         <span class="lb-name" id="lbName"></span>
         <span class="lb-mat"  id="lbMat"></span>
       </div>
-
-      <!-- Counter -->
       <span class="lb-counter" id="lbCounter"></span>
+    </div>
+  </div>
 
-    </div><!-- /.lb-stage -->
-  </div><!-- /.lightbox -->
+  <!-- ══ BACKDROP NAV ══ -->
+  <div class="nav__backdrop" id="navBackdrop" aria-hidden="true"></div>
+
 
   <script>
   'use strict';
@@ -562,7 +691,7 @@
     const grid    = document.getElementById('galGrid');
     const loading = document.getElementById('galLoading');
     try {
-      const res  = await fetch('images.json');
+      const res  = await fetch("images.json", { cache: "no-cache" });
       if (!res.ok) throw new Error('images.json not found');
       const data = await res.json();
       allItems   = flattenData(data);
@@ -575,7 +704,7 @@
       });
       updateCount();
     } catch (err) {
-      loading.textContent = 'Gallery unavailable — ' + err.message;
+      console.error('[Gallery]', err); loading.textContent = 'Gallery unavailable — ' + err.message; loading.style.color='rgba(220,100,100,0.8)';
     }
   }
 
@@ -653,7 +782,6 @@
     if (e.key === 'ArrowRight') nextImg();
   });
 
-  /* Touch swipe */
   let tsX = 0;
   lb.addEventListener('touchstart', e => { tsX = e.changedTouches[0].clientX; }, { passive: true });
   lb.addEventListener('touchend',   e => {
@@ -661,37 +789,53 @@
     if (Math.abs(dx) > 45) { dx < 0 ? nextImg() : prevImg(); }
   }, { passive: true });
 
-  /* ── Nav burger (inline, fără script.js) ── */
-  const burgerBtn  = document.getElementById('navBurger');
-  const navPanelEl = document.getElementById('navPanel');
-  if (burgerBtn && navPanelEl) {
-    burgerBtn.addEventListener('click', () => {
-      const open = navPanelEl.classList.toggle('open');
-      burgerBtn.setAttribute('aria-expanded', String(open));
-      burgerBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      navPanelEl.setAttribute('aria-hidden', String(!open));
-      document.body.style.overflow = open ? 'hidden' : '';
-    });
-    Array.from(navPanelEl.querySelectorAll('a')).forEach(a => {
-      a.addEventListener('click', () => {
-        navPanelEl.classList.remove('open');
-        burgerBtn.setAttribute('aria-expanded', 'false');
-        navPanelEl.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-      });
-    });
+  /* ══════════════════════════════════════════════════════
+     FIX 3 — NAV MOBIL: script corect cu backdrop
+     Reproduce exact logica din script.js (index.html)
+     ══════════════════════════════════════════════════════ */
+  (function() {
+    const burger   = document.getElementById('navBurger');
+    const panel    = document.getElementById('navPanel');
+    const backdrop = document.getElementById('navBackdrop');
+    if (!burger || !panel) return;
+
+    function openNav() {
+      panel.classList.add('open');
+      panel.setAttribute('aria-hidden', 'false');
+      burger.setAttribute('aria-expanded', 'true');
+      burger.setAttribute('aria-label', 'Close menu');
+      if (backdrop) backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeNav() {
+      panel.classList.remove('open');
+      panel.setAttribute('aria-hidden', 'true');
+      burger.setAttribute('aria-expanded', 'false');
+      burger.setAttribute('aria-label', 'Open menu');
+      if (backdrop) backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    burger.addEventListener('click', () =>
+      panel.classList.contains('open') ? closeNav() : openNav()
+    );
+
+    if (backdrop) backdrop.addEventListener('click', closeNav);
+
+    Array.from(panel.querySelectorAll('a')).forEach(a =>
+      a.addEventListener('click', closeNav)
+    );
+
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && navPanelEl.classList.contains('open')) {
-        navPanelEl.classList.remove('open');
-        burgerBtn.setAttribute('aria-expanded', 'false');
-        navPanelEl.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        burgerBtn.focus();
+      if (e.key === 'Escape' && panel.classList.contains('open')) {
+        closeNav();
+        burger.focus();
       }
     });
-  }
+  })();
 
-  /* URL filter param */
+  /* ── URL filter param ── */
   (function() {
     const p = new URLSearchParams(window.location.search);
     const f = p.get('filter') || p.get('domain');
@@ -702,6 +846,44 @@
 
   const yrEl = document.getElementById('yr');
   if (yrEl) yrEl.textContent = new Date().getFullYear();
+
+  /* ── Cursor custom inline ── */
+  (function() {
+    const cur  = document.getElementById('cursor');
+    if (!cur || 'ontouchstart' in window) { if (cur) cur.style.display = 'none'; return; }
+    const ring = cur.querySelector('.cursor__ring');
+    const dot  = cur.querySelector('.cursor__dot');
+    let cx = 0, cy = 0, rx = 0, ry = 0, raf = null, visible = false;
+    const lerp = (a, b, t) => a + (b - a) * t;
+    function tick() {
+      rx = lerp(rx, cx, 0.1); ry = lerp(ry, cy, 0.1);
+      if (dot)  { dot.style.left  = cx + 'px'; dot.style.top  = cy + 'px'; }
+      if (ring) { ring.style.left = rx.toFixed(2) + 'px'; ring.style.top = ry.toFixed(2) + 'px'; }
+      raf = requestAnimationFrame(tick);
+    }
+    document.addEventListener('mousemove', e => {
+      cx = e.clientX; cy = e.clientY;
+      if (!visible) { cur.style.opacity = '1'; visible = true; if (!raf) tick(); }
+    });
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest('a,button,[data-cursor="link"]')) cur.classList.add('hovering');
+    });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest('a,button,[data-cursor="link"]')) cur.classList.remove('hovering');
+    });
+    document.addEventListener('mouseleave', () => { cur.style.opacity = '0'; });
+    document.addEventListener('mouseenter', () => { cur.style.opacity = '1'; });
+  })();
+
+  /* ── Progress bar inline ── */
+  (function() {
+    const prog = document.getElementById('progress');
+    if (!prog) return;
+    window.addEventListener('scroll', function() {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      prog.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0).toFixed(2) + '%';
+    }, { passive: true });
+  })();
 
   initGallery();
   </script>
