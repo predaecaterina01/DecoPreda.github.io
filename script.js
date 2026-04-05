@@ -21,10 +21,14 @@ const dismissLoader = (() => {
     revealHero();
   };
 })();
-document.body.style.overflow = 'hidden';
-const _primaryTimer = setTimeout(dismissLoader, 1800);
-window.addEventListener('load', () => { clearTimeout(_primaryTimer); setTimeout(dismissLoader, 400); });
-setTimeout(dismissLoader, 3500);
+if (loaderEl) {
+  document.body.style.overflow = 'hidden';
+  const _primaryTimer = setTimeout(dismissLoader, 1800);
+  window.addEventListener('load', () => { clearTimeout(_primaryTimer); setTimeout(dismissLoader, 400); });
+  setTimeout(dismissLoader, 3500);
+} else {
+  document.body.style.overflow = '';
+}
 
 /* 2. HERO REVEAL */
 function revealHero() {
