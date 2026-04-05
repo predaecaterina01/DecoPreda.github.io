@@ -3120,33 +3120,28 @@ button {
   color: rgba(236, 224, 200, 1) !important;
   border-color: rgba(183, 158, 110, 0.85) !important;
 }
+
 /* ══════════════════════════════════════════════════════════
-   38. MOBILE NAV — FLOATING SIDEBAR (versiune finală v3)
-   Logica vizuală:
-   - Backdrop: gri închis — întunecă restul paginii
-   - Panel: voal luminos transparent — iese în evidență
-   - Text: alb cu text-shadow — lizibil pe orice fundal
-   - Opacitate progresivă: 100% / 50% / 10% — JS suprascrie la scroll
+   38. MOBILE NAV — FLOATING SIDEBAR
    ══════════════════════════════════════════════════════════ */
 
-/* ── Backdrop ── */
 .nav__backdrop {
   display: none;
   position: fixed;
   inset: 0;
-  z-index: 9997;
-  background: rgba(6, 5, 4, 0.62);
+  z-index: 9990;
+  background: rgba(6, 5, 4, 0.60);
   opacity: 0;
   transition: opacity 0.35s ease;
   pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
 }
 .nav__backdrop.open {
   display: block;
   opacity: 1;
-  pointer-events: all;
+  pointer-events: auto;
 }
 
-/* ── Desktop: reset total ── */
 @media (min-width: 901px) {
   .nav__backdrop { display: none !important; }
   .nav__panel {
@@ -3177,74 +3172,62 @@ button {
   .nav__item:nth-child(7) { opacity: 1 !important; }
 }
 
-/* ── Mobile ── */
 @media (max-width: 900px) {
 
-  .nav__burger { display: flex !important; }
+  .nav__burger { display: flex !important; z-index: 10001 !important; position: relative !important; }
 
-  /* Panel — voal alb/luminos semi-transparent */
   .nav__panel {
     position: fixed !important;
     top: 0 !important;
     right: 0 !important;
     left: auto !important;
     bottom: 0 !important;
-    width: 62vw !important;
-    max-width: 280px !important;
-    height: 100% !important;
-    /* Voal luminos — contrast față de backdrop-ul întunecat */
-    background: rgba(28, 24, 20, 0.92) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
+    width: 65vw !important;
+    max-width: 290px !important;
+    height: 100vh !important;
+    background: #1c1814 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-left: 1px solid rgba(255,255,255,0.10) !important;
     border-top: none !important;
     border-bottom: none !important;
     border-right: none !important;
     border-radius: 0 !important;
-    box-shadow:
-      -16px 0 60px rgba(0, 0, 0, 0.35),
-      inset 1px 0 0 rgba(255,255,255,0.15) !important;
+    box-shadow: -8px 0 32px rgba(0,0,0,0.45) !important;
     overflow: hidden !important;
-    z-index: 9999 !important;
+    z-index: 9995 !important;
     pointer-events: none !important;
-    transform: translateX(105%) !important;
-    opacity: 0 !important;
-    transition:
-      transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 0.28s ease !important;
+    transform: translateX(100%) !important;
+    opacity: 1 !important;
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    visibility: hidden !important;
   }
 
   .nav__panel.open {
     transform: translateX(0) !important;
-    opacity: 1 !important;
     pointer-events: auto !important;
+    visibility: visible !important;
   }
 
-  /* Gradient fade jos — hint scroll */
   .nav__panel::after {
     content: '' !important;
     position: absolute !important;
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    height: 80px !important;
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.18) 0%,
-      transparent 100%
-    ) !important;
+    height: 60px !important;
+    background: linear-gradient(to top, rgba(20,16,12,0.95) 0%, transparent 100%) !important;
     pointer-events: none !important;
     z-index: 2 !important;
   }
 
-  /* menu-scroll — zona scrollabilă */
   .menu-scroll {
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-end !important;
     width: 100% !important;
     height: 100% !important;
-    padding-top: calc(var(--nav-h, 64px) + 32px) !important;
+    padding-top: calc(var(--nav-h, 64px) + 28px) !important;
     padding-right: 28px !important;
     padding-bottom: 60px !important;
     padding-left: 12px !important;
@@ -3261,7 +3244,6 @@ button {
   }
   .menu-scroll::-webkit-scrollbar { display: none !important; }
 
-  /* Link-uri — alb cu text-shadow pentru lizibilitate */
   .nav__item {
     font-family: var(--serif) !important;
     font-weight: 300 !important;
@@ -3273,11 +3255,11 @@ button {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    min-height: 58px !important;
-    padding: 12px 0 !important;
+    min-height: 56px !important;
+    padding: 10px 0 !important;
     border: none !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
-    color: rgba(236, 230, 221, 0.96) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+    color: rgba(236, 230, 221, 0.95) !important;
     text-shadow: none !important;
     line-height: 1.2 !important;
     background: transparent !important;
@@ -3289,14 +3271,13 @@ button {
     user-select: none !important;
     position: relative !important;
     z-index: 5 !important;
-    -webkit-tap-highlight-color: rgba(255,255,255,0.10) !important;
+    -webkit-tap-highlight-color: rgba(255,255,255,0.06) !important;
     white-space: nowrap !important;
-    transition: color 0.15s ease !important;
+    transition: opacity 0.15s ease !important;
   }
   .nav__item::after  { display: none !important; }
   .nav__item::before { display: none !important; }
 
-  /* Opacitate progresivă inițială — JS updateFade() le suprascrie la scroll */
   .nav__item:nth-child(1) { opacity: 1.00 !important; }
   .nav__item:nth-child(2) { opacity: 0.50 !important; }
   .nav__item:nth-child(3) { opacity: 0.10 !important; }
@@ -3307,25 +3288,18 @@ button {
 
   .nav__item:hover,
   .nav__item:active,
-  .nav__item:focus {
-    opacity: 1 !important;
-    color: #ffffff !important;
-  }
-  .nav__item:active {
-    background: rgba(255, 255, 255, 0.10) !important;
-    border-radius: 6px !important;
-  }
+  .nav__item:focus { opacity: 1 !important; color: #fff !important; }
+  .nav__item:active { background: rgba(255,255,255,0.06) !important; border-radius: 4px !important; }
 
-  /* Contact */
   .nav__item--contact {
     font-family: var(--sans) !important;
     font-size: 9px !important;
     letter-spacing: 0.32em !important;
     text-transform: uppercase !important;
-    color: rgba(240, 232, 220, 0.72) !important;
+    color: rgba(200, 192, 180, 0.70) !important;
     text-shadow: none !important;
     padding: 12px 0 !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.10) !important;
+    border-top: 1px solid rgba(255,255,255,0.08) !important;
     border-bottom: none !important;
     margin-top: 8px !important;
     opacity: 0.85 !important;
@@ -3335,23 +3309,19 @@ button {
   }
   .nav__item--contact::after { display: none !important; }
   .nav__item--contact:hover,
-  .nav__item--contact:active {
-    opacity: 1 !important;
-    color: #ffffff !important;
-  }
+  .nav__item--contact:active { opacity: 1 !important; color: #fff !important; }
 
-  /* Signature Series */
   .nav__item--sig {
     font-family: var(--serif) !important;
     font-style: italic !important;
     font-size: clamp(18px, 4.5vw, 24px) !important;
     font-weight: 400 !important;
     text-transform: none !important;
-    color: rgba(224, 200, 150, 0.95) !important;
-    text-shadow: 0 1px 10px rgba(0,0,0,0.45) !important;
+    color: rgba(220, 196, 144, 0.95) !important;
+    text-shadow: none !important;
     background: transparent !important;
     border: none !important;
-    border-top: 1px solid rgba(200, 168, 100, 0.28) !important;
+    border-top: 1px solid rgba(200,168,100,0.22) !important;
     padding: 12px 0 !important;
     margin-top: 6px !important;
     opacity: 1 !important;
@@ -3361,31 +3331,7 @@ button {
   }
   .nav__item--sig::before { display: none !important; }
   .nav__item--sig:hover,
-  .nav__item--sig:active {
-    opacity: 1 !important;
-    color: rgba(244, 224, 170, 1) !important;
-    background: transparent !important;
-  }
+  .nav__item--sig:active { opacity: 1 !important; color: rgba(244,224,170,1) !important; background: transparent !important; }
 
-  /* Burger deasupra */
-  .nav__burger {
-    position: relative !important;
-    z-index: 10000 !important;
-  }
-}
-/* DEBUG NAV */
-@media (max-width: 900px) {
-  .nav__panel.open {
-    transform: none !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    background: red !important;
-    width: 200px !important;
-    height: 400px !important;
-    top: 0 !important;
-    right: 0 !important;
-    position: fixed !important;
-    z-index: 99999 !important;
-    display: block !important;
-  }
+  .nav__burger { position: relative !important; z-index: 10001 !important; }
 }
