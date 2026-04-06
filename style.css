@@ -3188,11 +3188,28 @@ button {
   }
 
   /* X la deschidere */
+ .nav__burger {
+    color: #F5F0E8;
+  }
+  .nav.on-light .nav__burger {
+    color: #1A1714;
+  }
+  .nav__burger span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+  }
+  .nav__burger span:nth-child(1) {
+    margin-bottom: 6px;
+  }
   .nav__burger.open span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
+    transform: translateY(3.75px) rotate(45deg);
   }
   .nav__burger.open span:nth-child(2) {
-    transform: translateY(-7px) rotate(-45deg);
+    transform: translateY(-3.75px) rotate(-45deg);
   }
 
   .nav__panel {
