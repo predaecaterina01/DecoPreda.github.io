@@ -118,32 +118,27 @@ $$('[data-magnetic]').forEach(btn => {
   btn.addEventListener('mouseleave', () => { active=false; tx=0; ty=0; if (!rAF) rAF=requestAnimationFrame(tick); });
 });
 
-/* 11. MOBILE NAV — Floating Sidebar cu scroll fade */
+/* 11. MOBILE NAV — Logică Completă */
 (function() {
   const burgerBtn  = document.getElementById('navBurger');
   const navPanelEl = document.getElementById('navPanel');
+  const backdropEl = document.getElementById('navBackdrop');
   const menuScroll = document.getElementById('menuScroll');
-  if (!burgerBtn || !navPanelEl) return;
 
-  let backdropEl = document.getElementById('navBackdrop');
-  if (!backdropEl) {
-    backdropEl = document.createElement('div');
-    backdropEl.className = 'nav__backdrop';
-    backdropEl.id = 'navBackdrop';
-    backdropEl.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(backdropEl);
-  }
-
-  const items = menuScroll ? Array.from(menuScroll.querySelectorAll('.nav__item')) : [];
+  if (!burgerBtn || !navPanelEl || !backdropEl) return;
 
   function openNav() {
     navPanelEl.classList.add('open');
     backdropEl.classList.add('open');
     burgerBtn.classList.add('open');
+    
     burgerBtn.setAttribute('aria-expanded', 'true');
-    burgerBtn.setAttribute('aria-label', 'Close menu');
     navPanelEl.setAttribute('aria-hidden', 'false');
+    
+    // Blochează scroll-ul paginii în spate
     document.body.style.overflow = 'hidden';
+    
+    // Reset scroll meniu la început
     if (menuScroll) menuScroll.scrollTop = 0;
   }
 
@@ -151,26 +146,35 @@ $$('[data-magnetic]').forEach(btn => {
     navPanelEl.classList.remove('open');
     backdropEl.classList.remove('open');
     burgerBtn.classList.remove('open');
+    
     burgerBtn.setAttribute('aria-expanded', 'false');
-    burgerBtn.setAttribute('aria-label', 'Open menu');
     navPanelEl.setAttribute('aria-hidden', 'true');
+    
+    // Deblochează scroll-ul paginii
     document.body.style.overflow = '';
   }
 
-  burgerBtn.addEventListener('click', () => navPanelEl.classList.contains('open') ? closeNav() : openNav());
+  // Toggle la click pe burger
+  burgerBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    navPanelEl.classList.contains('open') ? closeNav() : openNav();
+  });
+
+  // Închide la click pe fundalul gri
   backdropEl.addEventListener('click', closeNav);
 
-  if (menuScroll) {
-    menuScroll.addEventListener('scroll', function() {}, { passive: true });
-    menuScroll.addEventListener('touchmove', function(e) {
-      e.stopPropagation();
-    }, { passive: true });
-  }
+  // Închide automat când dai click pe orice link din meniu
+  const navLinks = navPanelEl.querySelectorAll('.nav__item');
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      // Mic delay pentru a lăsa browserul să proceseze scroll-ul către ancoră
+      setTimeout(closeNav, 100);
+    });
+  });
 
-  items.forEach(a => { if (a.tagName === 'A') a.addEventListener('click', closeNav); });
-
+  // Închide la tasta ESC
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && navPanelEl.classList.contains('open')) { closeNav(); burgerBtn.focus(); }
+    if (e.key === 'Escape' && navPanelEl.classList.contains('open')) closeNav();
   });
 })();
 
