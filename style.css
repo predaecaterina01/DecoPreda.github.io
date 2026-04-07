@@ -1680,11 +1680,16 @@ button {
 }
 
 .project-row__img--arch {
-  background: linear-gradient(140deg, #cec4b4 0%, #b0a594 50%, #c4baa8 100%);
+  background-image: url('images/residential/living/mc-ivory-living-01.webp');
+  background-size: cover;
+  background-position: center;
+  position: relative;
 }
 
 .project-row__img--infra {
-  background: linear-gradient(140deg, #7a7a78 0%, #5a5a58 50%, #6e6e6c 100%);
+  background-image: url('images/industrial/ind-02.webp');
+  background-size: cover;
+  background-position: center 40%;
 }
 
 .project-row__img::before {
