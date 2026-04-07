@@ -432,7 +432,9 @@
       DECO<span class="nav__wordmark-thin">PREDA</span>
     </a>
     <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="navPanel">
-      <span></span><span></span>
+    <span class="nav__burger-line"></span>
+   <span class="nav__burger-line"></span>
+   <span class="nav__burger-line"></span>
     </button>
     <div class="nav__panel" id="navPanel" aria-hidden="true">
       <div class="menu-scroll" id="menuScroll">
@@ -609,88 +611,8 @@
   </footer>
 
   <script src="script.js"></script>
-  <script>
-  (function() {
-    'use strict';
-
-    const burger   = document.getElementById('navBurger');
-    const panel    = document.getElementById('navPanel');
-    const scroll   = document.getElementById('menuScroll');
-    const backdrop = document.getElementById('navBackdrop');
-    if (!burger || !panel) return;
-
-    /* Clonăm burger-ul pentru a elimina listener-ul din script.js */
-    const btn = burger.cloneNode(true);
-    burger.parentNode.replaceChild(btn, burger);
-
-    const items = panel ? Array.from(panel.querySelectorAll('.nav__item')) : [];
-    const opacities = [1, 0.40, 0.10];
-
-    /* Actualizează opacitățile în funcție de poziția scroll */
-    function updateFade() {
-      if (!scroll) return;
-      const containerTop = scroll.getBoundingClientRect().top;
-      let closestIdx = 0, closestDist = Infinity;
-      items.forEach((item, i) => {
-        const dist = Math.abs(item.getBoundingClientRect().top - containerTop);
-        if (dist < closestDist) { closestDist = dist; closestIdx = i; }
-      });
-      items.forEach((item, i) => {
-        const delta = i - closestIdx;
-        const op = opacities[Math.min(Math.abs(delta), opacities.length - 1)];
-        item.style.opacity = op;
-      });
-    }
-
-    function openNav() {
-      panel.classList.add('open');
-      panel.setAttribute('aria-hidden', 'false');
-      btn.setAttribute('aria-expanded', 'true');
-      btn.setAttribute('aria-label', 'Close menu');
-      if (backdrop) backdrop.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      /* Reset scroll și fade la deschidere */
-      if (scroll) scroll.scrollTop = 0;
-      setTimeout(updateFade, 50);
-    }
-
-    function closeNav() {
-      panel.classList.remove('open');
-      panel.setAttribute('aria-hidden', 'true');
-      btn.setAttribute('aria-expanded', 'false');
-      btn.setAttribute('aria-label', 'Open menu');
-      if (backdrop) backdrop.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    btn.addEventListener('click', () =>
-      panel.classList.contains('open') ? closeNav() : openNav()
-    );
-
-    if (backdrop) backdrop.addEventListener('click', closeNav);
-
-    /* Scroll listener pe zona de scroll interior */
-    if (scroll) {
-      scroll.addEventListener('scroll', updateFade, { passive: true });
-    }
-
-    /* Click pe link → închide */
-    items.forEach(a => {
-      if (a.tagName === 'A') {
-        a.addEventListener('click', closeNav);
-      }
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && panel.classList.contains('open')) {
-        closeNav(); btn.focus();
-      }
-    });
-
     const yr = document.getElementById('yr');
     if (yr) yr.textContent = new Date().getFullYear();
-  })();
   </script>
-
 </body>
 </html>
