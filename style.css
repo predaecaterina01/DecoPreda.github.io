@@ -3328,3 +3328,17 @@ button {
     transition: opacity 0.15s ease !important;
   }
 }
+/* ── NAV MOBILE FIX v2 — compositing layer + visibility ── */
+@media (max-width: 900px) {
+  .nav__panel {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    /* Eliminăm delay-ul de visibility — acesta era vinovatul principal */
+  }
+
+  .nav__panel.is-active {
+    -webkit-transform: translateX(0) translateZ(0) !important;
+    transform: translateX(0) translateZ(0) !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+}
