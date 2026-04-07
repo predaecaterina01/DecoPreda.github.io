@@ -3217,6 +3217,8 @@ button {
     pointer-events: none !important;
     visibility: visible !important;
     opacity: 1 !important;
+    overflow: hidden !important;
+    touch-action: none !important;
   }
   .nav__panel.open {
     transform: translateX(0) !important;
@@ -3224,17 +3226,16 @@ button {
   }
 
   .menu-scroll {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
-    padding: 100px 30px 60px !important;
-    height: 100% !important;
-    overflow-y: scroll !important;
-    -webkit-overflow-scrolling: touch !important;
-    overscroll-behavior-y: contain !important;
-    touch-action: pan-y !important;
-    box-sizing: border-box !important;
-  }
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  height: 100% !important;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: auto !important;
+  padding: 100px 30px 60px !important;
+  box-sizing: border-box !important;
+}
 
   .nav__item {
     font-size: 20px !important;
