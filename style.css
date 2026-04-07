@@ -3196,7 +3196,7 @@ button {
     padding-top: 20px !important;
     opacity: 0.6 !important;
   }
-
+ 
   .nav__item--cta {
     border: none !important;
     background: transparent !important;
@@ -3306,33 +3306,11 @@ button {
     margin: 0 !important;
   }
 
-} /* end desktop */
-/* ── NAV MOBILE FIX — z-index + touch ── */
+/* ══ NAV MOBILE FIX — FINAL ══════════════════════════════ */
 @media (max-width: 900px) {
-  .nav__panel::after {
-    z-index: 1 !important;
-    pointer-events: none !important;
-  }
 
-  .menu-scroll {
-    position: relative;
-    z-index: 5 !important;
-  }
-
-  .nav__item {
-    z-index: 10 !important;
-    position: relative !important;
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    cursor: auto !important;
-    transition: opacity 0.15s ease !important;
-  }
-}
-/* ── NAV MOBILE FIX v2 — compositing layer + visibility ── */
-@media (max-width: 900px) {
   .nav__panel {
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) !important;
-    /* Eliminăm delay-ul de visibility — acesta era vinovatul principal */
   }
 
   .nav__panel.is-active {
@@ -3341,4 +3319,26 @@ button {
     visibility: visible !important;
     pointer-events: auto !important;
   }
+
+  .nav__panel::after {
+    z-index: 1 !important;
+    pointer-events: none !important;
+  }
+
+  .menu-scroll {
+    position: relative !important;
+    z-index: 5 !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+  }
+
+  .nav__item {
+    position: relative !important;
+    z-index: 10 !important;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    cursor: auto !important;
+    transition: opacity 0.15s ease !important;
+  }
+
 }
