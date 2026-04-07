@@ -118,86 +118,136 @@ $$('[data-magnetic]').forEach(btn => {
   btn.addEventListener('mouseleave', () => { active=false; tx=0; ty=0; if (!rAF) rAF=requestAnimationFrame(tick); });
 });
 
-/* 11. MOBILE NAV — Logică Completă (Final Fix) */
-(function() {
-  const burgerBtn  = document.getElementById('navBurger');
-  const navPanelEl = document.getElementById('navPanel');
-  const backdropEl = document.getElementById('navBackdrop');
-  const menuScroll = document.getElementById('menuScroll');
+/* ════════════════════════════════════════════════════════════
+   DECO PREDA — MOBILE NAV JS — VERSIUNEA FINALĂ
+   Înlocuiește complet secțiunea 11 din script.js.
+
+   Ce combină față de ambele soluții anterioare:
+   - Clase .is-active / .is-open (din soluția nouă) → consistență cu CSS
+   - Scroll lock cu position:fixed + scrollTo (din soluția nouă) → robust
+   - overscroll touchmove fallback pentru Safari < 16 (din soluția mea)
+   - Resize handler care închide la rotire (din soluția mea)
+   ════════════════════════════════════════════════════════════ */
+
+/* 11. MOBILE NAV — Final */
+(function () {
+  var burgerBtn  = document.getElementById('navBurger');
+  var navPanelEl = document.getElementById('navPanel');
+  var backdropEl = document.getElementById('navBackdrop');
+  var menuScroll = document.getElementById('menuScroll');
+  var body       = document.body;
 
   if (!burgerBtn || !navPanelEl || !backdropEl) return;
 
-  // Funcție pentru a preveni scroll-ul pe fundal (iOS fix)
-  function lockScroll() {
-    const scrollY = window.scrollY;
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = '100%';
+  var savedScrollY = 0;
+
+  /* ── Scroll Lock ─────────────────────────────────────────
+     Metoda position:fixed previne scroll chaining pe iOS Safari.
+     Salvăm scrollY și îl restaurăm la închidere fără salt vizual.
+  ──────────────────────────────────────────────────────── */
+  function lockBody() {
+    savedScrollY = window.pageYOffset;
+    body.style.overflow = 'hidden';
+    body.style.position = 'fixed';
+    body.style.top      = '-' + savedScrollY + 'px';
+    body.style.width    = '100%';
+    body.classList.add('nav-open');
   }
 
-  function unlockScroll() {
-    const scrollY = document.body.style.top;
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    window.scrollTo(0, parseInt(scrollY || '0') * -1);
+  function unlockBody() {
+    body.style.overflow = '';
+    body.style.position = '';
+    body.style.top      = '';
+    body.style.width    = '';
+    body.classList.remove('nav-open');
+    window.scrollTo(0, savedScrollY);
   }
 
+  /* ── Open / Close ─────────────────────────────────────── */
   function openNav() {
-    navPanelEl.classList.add('open');
-    backdropEl.classList.add('open');
-    burgerBtn.classList.add('open');
-    
+    navPanelEl.classList.add('is-active');
+    backdropEl.classList.add('is-active');
+    burgerBtn.classList.add('is-open');
+
     burgerBtn.setAttribute('aria-expanded', 'true');
     navPanelEl.setAttribute('aria-hidden', 'false');
-    
-    // Blochează scroll-ul paginii
-    document.body.style.overflow = 'hidden';
-    
+
+    lockBody();
+
     if (menuScroll) menuScroll.scrollTop = 0;
   }
 
   function closeNav() {
-    navPanelEl.classList.remove('open');
-    backdropEl.classList.remove('open');
-    burgerBtn.classList.remove('open');
-    
+    navPanelEl.classList.remove('is-active');
+    backdropEl.classList.remove('is-active');
+    burgerBtn.classList.remove('is-open');
+
     burgerBtn.setAttribute('aria-expanded', 'false');
     navPanelEl.setAttribute('aria-hidden', 'true');
-    
-    // Deblochează scroll-ul paginii
-   document.body.style.overflow = '';
+
+    unlockBody();
   }
 
-  // Toggle principal
-  burgerBtn.addEventListener('click', (e) => {
+  function isOpen() {
+    return navPanelEl.classList.contains('is-active');
+  }
+
+  /* ── Events ───────────────────────────────────────────── */
+
+  // Burger toggle
+  burgerBtn.addEventListener('click', function (e) {
     e.preventDefault();
-    navPanelEl.classList.contains('open') ? closeNav() : openNav();
+    isOpen() ? closeNav() : openNav();
   });
 
-  // Închide la click pe fundalul blurat
+  // Backdrop click
   backdropEl.addEventListener('click', closeNav);
 
-  // Închide la click pe link-uri (important pentru On-Page anchors)
-  const navLinks = navPanelEl.querySelectorAll('.nav__item');
-  navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      // Delay scurt pentru a permite începerea scroll-ului către secțiune
-      setTimeout(closeNav, 300);
+  // Link click — delay scurt pentru smooth scroll
+  var navLinks = navPanelEl.querySelectorAll('.nav__item');
+  navLinks.forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (isOpen()) setTimeout(closeNav, 280);
     });
   });
 
-  // Închide la tasta ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && navPanelEl.classList.contains('open')) closeNav();
+  // ESC
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen()) closeNav();
   });
 
-  // Prevenire scroll "peste margini" în meniu (Overscroll fix)
-  navPanelEl.addEventListener('touchmove', (e) => {
-    if (navPanelEl.classList.contains('open')) {
-      e.stopPropagation();
-    }
-  }, { passive: true });
+  // Resize — închide la trecerea pe desktop sau la rotire
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 900 && isOpen()) closeNav();
+  });
+
+  /* ── iOS overscroll fallback ──────────────────────────────
+     overscroll-behavior:contain rezolvă Safari 16+.
+     Acest touchmove handler acoperă Safari < 16.
+  ──────────────────────────────────────────────────────── */
+  if (menuScroll) {
+    var touchStartY = 0;
+
+    menuScroll.addEventListener('touchstart', function (e) {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    menuScroll.addEventListener('touchmove', function (e) {
+      var scrollTop    = this.scrollTop;
+      var scrollHeight = this.scrollHeight;
+      var clientHeight = this.clientHeight;
+      var deltaY       = touchStartY - e.touches[0].clientY;
+
+      // La marginea de sus, scroll în jos — ar propaga la pagina de sub
+      var atTop    = scrollTop <= 0 && deltaY < 0;
+      // La marginea de jos, scroll în sus — ar propaga la pagina de sub
+      var atBottom = (scrollTop + clientHeight) >= scrollHeight && deltaY > 0;
+
+      if (atTop || atBottom) {
+        e.preventDefault(); // blochează propagarea
+      }
+    }, { passive: false }); // passive:false necesar pentru preventDefault
+  }
 
 })();
 
