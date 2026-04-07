@@ -3206,10 +3206,9 @@ button {
     width: 80vw !important;
     max-width: 300px !important;
     height: 100dvh !important;
-    background: rgba(245, 240, 232, 0.96) !important;
    background: rgba(245, 240, 232, 0.98) !important;
-backdrop-filter: none !important;
--webkit-backdrop-filter: none !important;
+   backdrop-filter: none !important;
+   -webkit-backdrop-filter: none !important;
     transform: translateX(100%) !important;
     display: flex !important;
     flex-direction: column !important;
@@ -3233,6 +3232,7 @@ backdrop-filter: none !important;
     overflow-y: scroll !important;
     -webkit-overflow-scrolling: touch !important;
     overscroll-behavior-y: contain !important;
+    touch-action: pan-y !important;
     box-sizing: border-box !important;
   }
 
