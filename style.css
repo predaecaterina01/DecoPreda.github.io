@@ -2999,25 +2999,28 @@ button {
 }
 
 /* ════════════════════════════════════════════════════════════
-   DECO PREDA — NAV MOBILE — v9 FINAL
-   Înlocuiește TOT blocul nav de la finalul style.css
+   DECO PREDA — NAV MOBILE — FINAL CLEAN
+   Înlocuiește TOT de după comentariul "SPACING MOBIL"
    ════════════════════════════════════════════════════════════ */
 
 /* ── Burger lines ─────────────────────────────────────────── */
 .nav__burger-line {
   display: block;
   width: 24px;
-  height: 2px; /* Mărește de la 1px la 2px pentru un aspect mai solid */
-  background: #000000 !important; /* Forțează negru pur pentru test */
-  /* restul proprietăților rămân neschimbate */
+  height: 2px;
+  background: #ECE6DD;
+  transition: transform 0.5s cubic-bezier(0.22,1,0.36,1),
+              opacity 0.25s ease,
+              background 0.5s ease;
 }
 
-.nav:not(.on-light) .nav__burger-line {
-  background: #ECE6DD;
+.nav.on-light .nav__burger-line,
+.nav__burger-line {
+  background: #000000;
 }
 
 .nav__burger.is-open .nav__burger-line {
-  background: #2B2826 !important;
+  background: #2B2826;
 }
 .nav__burger.is-open .nav__burger-line:nth-child(1) {
   transform: translateY(9px) rotate(45deg);
@@ -3041,6 +3044,7 @@ button {
   pointer-events: none;
   transition: opacity 0.35s ease, visibility 0s linear 0.35s;
 }
+
 .nav__backdrop.is-active {
   opacity: 1;
   visibility: visible;
@@ -3051,17 +3055,20 @@ button {
 /* ══ MOBIL ════════════════════════════════════════════════ */
 @media (max-width: 900px) {
 
+  /* Nav bar */
   .nav {
-    height: 100px !important;
+    height: 64px !important;
     background: rgba(246, 243, 238, 0.98) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    border-bottom: 1px solid rgba(43,40,38,0.08) !important;
   }
 
   .nav.on-dark {
     background: rgba(246, 243, 238, 0.98) !important;
   }
 
+  /* Burger */
   .nav__burger {
     display: flex !important;
     flex-direction: column !important;
@@ -3071,8 +3078,10 @@ button {
     border: none !important;
     cursor: pointer !important;
     z-index: 2100 !important;
+    position: relative !important;
   }
 
+  /* Panel — slide din dreapta */
   .nav__panel {
     display: flex !important;
     flex-direction: column !important;
@@ -3091,35 +3100,39 @@ button {
     background: #F6F3EE !important;
     box-shadow: -10px 0 40px rgba(0,0,0,0.15) !important;
     border-left: 1px solid rgba(43,40,38,0.08) !important;
+
+    /* Stare închisă */
     transform: translateX(102%) !important;
     visibility: hidden !important;
     pointer-events: none !important;
+
+    /* Tranziție FĂRĂ delay pe visibility la deschidere */
     transition: transform 0.5s cubic-bezier(0.22,1,0.36,1),
-                visibility 0s linear 0.5s,
-                pointer-events 0s linear 0.5s !important;
+                visibility 0s linear 0.5s !important;
   }
 
   .nav__panel.is-active {
-    transform: translateX(0) !important;
+    /* translateZ(0) forțează GPU layer în Safari — fix pentru visibility înghețat */
+    -webkit-transform: translateX(0) translateZ(0) !important;
+    transform: translateX(0) translateZ(0) !important;
     visibility: visible !important;
     pointer-events: auto !important;
     transition: transform 0.5s cubic-bezier(0.22,1,0.36,1),
-                visibility 0s linear 0s,
-                pointer-events 0s linear 0s !important;
+                visibility 0s linear 0s !important;
   }
 
-  /* Mist effect */
+  /* Mist effect — z-index 1 ca să nu blocheze tap-urile */
   .nav__panel::after {
     content: '';
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 25%;
     background: linear-gradient(to bottom, transparent 0%, #F6F3EE 100%);
-    pointer-events: none;
-    z-index: 2;
+    pointer-events: none !important;
+    z-index: 1 !important;
   }
 
-  /* ── MENU-SCROLL ────────────────────────────────────────── */
+  /* Menu scroll — z-index peste ::after */
   .menu-scroll {
     display: flex !important;
     flex-direction: column !important;
@@ -3131,7 +3144,7 @@ button {
     visibility: visible !important;
     pointer-events: auto !important;
 
-    padding-top: 120px !important;
+    padding-top: 100px !important;
     padding-bottom: 100px !important;
     padding-left: 32px !important;
     padding-right: 24px !important;
@@ -3140,12 +3153,17 @@ button {
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
     overscroll-behavior-y: contain !important;
+
     background: transparent !important;
+    position: relative !important;
+    z-index: 5 !important;
+
+    /* Eliminăm orice mască — bug Safari */
     -webkit-mask-image: none !important;
     mask-image: none !important;
   }
 
-  /* ── NAV ITEMS ────────────────────────────────────────────*/
+  /* Nav items */
   .nav__item {
     font-family: 'Cormorant Garamond', Georgia, serif !important;
     font-size: 30px !important;
@@ -3154,6 +3172,7 @@ button {
     text-transform: none !important;
     color: #2B2826 !important;
     text-decoration: none !important;
+
     display: block !important;
     width: 100% !important;
     padding: 14px 0 !important;
@@ -3161,17 +3180,25 @@ button {
     border: none !important;
     border-bottom: 1px solid rgba(43,40,38,0.10) !important;
     background: transparent !important;
+
+    /* Z-index peste mist */
     position: relative !important;
-    z-index: 1 !important;
-    box-shadow: none !important;
+    z-index: 10 !important;
+
     pointer-events: auto !important;
     cursor: pointer !important;
-    transition: opacity 0.2s ease !important;
+
+    /* touch-action: manipulation elimină double-tap zoom pe iOS */
+    touch-action: manipulation !important;
     -webkit-tap-highlight-color: rgba(0,0,0,0.05) !important;
+
+    transition: opacity 0.15s ease !important;
   }
 
+  /* Elimină underline-ul animat de pe desktop */
   .nav__item::after { display: none !important; }
 
+  /* Gradient de opacitate — efect vizual */
   .menu-scroll .nav__item:nth-child(1) { opacity: 1    !important; }
   .menu-scroll .nav__item:nth-child(2) { opacity: 0.85 !important; }
   .menu-scroll .nav__item:nth-child(3) { opacity: 0.65 !important; }
@@ -3184,7 +3211,9 @@ button {
     outline: none !important;
   }
 
-  .nav__item--contact { color: #7A736A !important; }
+  .nav__item--contact {
+    color: #7A736A !important;
+  }
 
   .nav__item--sig {
     font-family: 'Jost', system-ui, sans-serif !important;
@@ -3196,11 +3225,16 @@ button {
     padding-top: 20px !important;
     opacity: 0.6 !important;
   }
- 
+
   .nav__item--cta {
     border: none !important;
     background: transparent !important;
     color: #7A736A !important;
+  }
+
+  /* Cursor auto pe mobile — iOS tratează cursor:none ca non-interactiv */
+  body, a, button {
+    cursor: auto;
   }
 
 } /* end mobile */
@@ -3254,6 +3288,8 @@ button {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
+    position: static !important;
+    z-index: auto !important;
     -webkit-mask-image: none !important;
     mask-image: none !important;
   }
@@ -3274,24 +3310,29 @@ button {
     visibility: visible !important;
     margin: 0 !important;
     position: relative !important;
+    z-index: auto !important;
+    touch-action: auto !important;
     transition: color 0.25s ease !important;
     text-decoration: none !important;
     pointer-events: auto !important;
-    cursor: pointer !important;
+    cursor: none !important;
   }
 
   .nav__item::after {
     content: '' !important;
     display: block !important;
     position: absolute !important;
-    bottom: -2px !important; left: 0 !important;
-    width: 0 !important; height: 1px !important;
+    bottom: -2px !important;
+    left: 0 !important;
+    width: 0 !important;
+    height: 1px !important;
     background: #7A736A !important;
     transition: width 0.5s cubic-bezier(0.22,1,0.36,1) !important;
   }
 
   .nav__item:hover { color: #ECE6DD !important; }
   .nav__item:hover::after { width: 100% !important; }
+
   .nav.on-light .nav__item { color: #7A756F !important; }
   .nav.on-light .nav__item:hover { color: #2B2826 !important; }
 
@@ -3306,39 +3347,4 @@ button {
     margin: 0 !important;
   }
 
-/* ══ NAV MOBILE FIX — FINAL ══════════════════════════════ */
-@media (max-width: 900px) {
-
-  .nav__panel {
-    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) !important;
-  }
-
-  .nav__panel.is-active {
-    -webkit-transform: translateX(0) translateZ(0) !important;
-    transform: translateX(0) translateZ(0) !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-  }
-
-  .nav__panel::after {
-    z-index: 1 !important;
-    pointer-events: none !important;
-  }
-
-  .menu-scroll {
-    position: relative !important;
-    z-index: 5 !important;
-    mask-image: none !important;
-    -webkit-mask-image: none !important;
-  }
-
-  .nav__item {
-    position: relative !important;
-    z-index: 10 !important;
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    cursor: auto !important;
-    transition: opacity 0.15s ease !important;
-  }
-
-}
+} /* end desktop */
