@@ -3347,3 +3347,21 @@ button {
     min-height: 210px !important;
   }
 }
+/* ── Mist fade la baza meniului mobil ── */
+@media (max-width: 900px) {
+  .nav__panel::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, #F6F3EE);
+    pointer-events: none !important;
+    z-index: 2;
+  }
+
+  /* ── Burger vizibil pe hero dark ── */
+  .nav:not(.on-light) .nav__burger-line {
+    background: #D9D1C5 !important;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  }
+}
