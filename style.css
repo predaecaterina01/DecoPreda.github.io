@@ -3336,109 +3336,50 @@ button {
     margin: 0 !important;
   }
 
-/* ════════════════════════════════════════════════════════════
-   DECO PREDA — FINAL ETHEREAL MOBILE NAV (Consolidated)
-   Include: Aliniere, Masking Fade, Letter Spacing & Refinement
-   ════════════════════════════════════════════════════════════ */
-
+/* ── Mist fade la baza meniului mobil ── */
 @media (max-width: 900px) {
-
-  /* 1. Panoul principal — "Stratul Atmosferic" */
-  .nav__panel {
-    display: flex !important;
-    flex-direction: column !important;
-    position: fixed !important;
-    top: 0 !important; right: 0 !important; bottom: 0 !important;
-    width: 82vw !important;
-    max-width: 340px !important;
-    z-index: 1000 !important;
-    background: rgba(246, 243, 238, 0.97) !important; /* Ivory aproape opac */
-    
-    /* Eliminăm marginile dure pentru contopire */
-    border-left: none !important;
-    box-shadow: none !important;
-    overflow: hidden !important;
-
-    /* EFECTUL DE DIZOLVARE: Textul apare/dispare lin la margini */
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
-
-    /* Mecanica de deschidere (Hardware Accelerated) */
-    transform: translateX(110%) translateZ(0) !important;
-    visibility: hidden !important;
-    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.5s !important;
+  .nav__panel::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, #F6F3EE);
+    pointer-events: none !important;
+    z-index: 2;
   }
 
-  .nav__panel.is-active {
-    transform: translateX(0) translateZ(0) !important;
-    visibility: visible !important;
-    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0s !important;
-  }
-
-  /* 2. Containerul de Scroll — Alinierea cu Logo-ul */
-  .menu-scroll {
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 !important;
-    width: 100% !important;
-    height: 100% !important;
-    
-    /* Nivelare: Systems se aliniază cu DECO PREDA */
-    padding-top: 115px !important; 
-    padding-bottom: 120px !important;
-    padding-left: 32px !important;
-    padding-right: 24px !important;
-
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    scrollbar-width: none; /* Ascunde scrollbar pe Firefox */
-  }
-  
-  .menu-scroll::-webkit-scrollbar { display: none; } /* Ascunde scrollbar pe Safari/Chrome */
-
-  /* 3. Link-urile — Tipografie & Rafinament Interactiv */
-  .nav__item {
-    font-family: 'Cormorant Garamond', Georgia, serif !important;
-    font-size: clamp(24px, 6vw, 30px) !important;
-    font-weight: 300 !important;
-    color: #2B2826 !important;
-    text-decoration: none !important;
-    display: block !important;
-    padding: 15px 0 !important;
-    
-    /* Linie discretă care nu atinge marginea (Organic Look) */
-    border-bottom: 1px solid rgba(43, 40, 38, 0.06) !important;
-    width: 90% !important; 
-    
-    position: relative !important;
-    z-index: 10 !important;
-    pointer-events: auto !important;
-    
-    /* Tranziție fluidă pentru efectul senzorial */
-    transition: letter-spacing 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease, color 0.3s ease !important;
-  }
-
-  /* Efectul la atingere: Literele "respiră" */
-  .nav__item:active {
-    letter-spacing: 0.06em !important;
-    color: #7A736A !important;
-    opacity: 0.8 !important;
-  }
-
-  /* Signature Series — Păstrat ca element distinct */
-  .nav__item--sig {
-    font-family: 'Jost', sans-serif !important;
-    font-size: 10px !important;
-    letter-spacing: 0.35em !important;
-    text-transform: uppercase !important;
-    color: #9E9890 !important;
-    border-bottom: none !important;
-    margin-top: 20px !important;
-  }
-
-  /* 4. Fix Contrast Burger pe Hero Dark */
+  /* ── Burger vizibil pe hero dark ── */
   .nav:not(.on-light) .nav__burger-line {
     background: #D9D1C5 !important;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
   }
+}
+
+/* ── Rafinament nav mobil ── */
+@media (max-width: 900px) {
+
+  .nav__panel {
+    border-left: none !important;
+    box-shadow: -4px 0 32px rgba(10,9,8,0.08) !important;
+  }
+
+  .menu-scroll {
+    scrollbar-width: none !important;
+  }
+  .menu-scroll::-webkit-scrollbar { display: none; }
+
+  .nav__item {
+    border-bottom: 1px solid rgba(43,40,38,0.06) !important;
+    width: 90% !important;
+  }
+
+  .nav__item:active {
+    letter-spacing: 0.05em !important;
+  }
+
+  .nav__backdrop.is-active {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
 }
