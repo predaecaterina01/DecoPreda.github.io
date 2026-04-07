@@ -3336,17 +3336,6 @@ button {
     margin: 0 !important;
   }
 
-} /* end desktop */
-.nav.on-dark .nav__burger-line {
-  background: #D9D1C5 !important;
-}
-@media (max-width: 900px) {
-  .nav__panel {
-    bottom: auto !important;
-    height: 30vh !important;
-    min-height: 210px !important;
-  }
-}
 /* ── Mist fade la baza meniului mobil ── */
 @media (max-width: 900px) {
   .nav__panel::after {
