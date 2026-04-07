@@ -131,118 +131,114 @@ $$('[data-magnetic]').forEach(btn => {
 
 /* 11. MOBILE NAV — Final */
 (function () {
-  var burgerBtn  = document.getElementById('navBurger');
-  var navPanelEl = document.getElementById('navPanel');
-  var backdropEl = document.getElementById('navBackdrop');
-  var menuScroll = document.getElementById('menuScroll');
-  var body       = document.body;
+  var burger   = document.getElementById('navBurger');
+  var panel    = document.getElementById('navPanel');
+  var backdrop = document.getElementById('navBackdrop');
+  var scroll   = document.getElementById('menuScroll');
+  if (!burger || !panel || !backdrop) return;
 
-  if (!burgerBtn || !navPanelEl || !backdropEl) return;
+  var savedY = 0;
 
-  var savedScrollY = 0;
-
-  /* ── Scroll Lock ─────────────────────────────────────────
-     Metoda position:fixed previne scroll chaining pe iOS Safari.
-     Salvăm scrollY și îl restaurăm la închidere fără salt vizual.
-  ──────────────────────────────────────────────────────── */
-function lockBody() {
-  savedScrollY = window.pageYOffset;
-  body.style.overflow = 'hidden';
-  body.classList.add('nav-open');
-}
-
-function unlockBody() {
-  body.style.overflow = '';
-  body.classList.remove('nav-open');
-  window.scrollTo(0, savedScrollY);
-}
-
-  /* ── Open / Close ─────────────────────────────────────── */
-  function openNav() {
-    navPanelEl.classList.add('is-active');
-    backdropEl.classList.add('is-active');
-    burgerBtn.classList.add('is-open');
-
-    burgerBtn.setAttribute('aria-expanded', 'true');
-    navPanelEl.setAttribute('aria-hidden', 'false');
-
-    lockBody();
-
-    if (menuScroll) menuScroll.scrollTop = 0;
+  function open() {
+    savedY = window.pageYOffset;
+    panel.classList.add('is-active');
+    backdrop.classList.add('is-active');
+    burger.classList.add('is-open');
+    burger.setAttribute('aria-expanded', 'true');
+    panel.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    if (scroll) scroll.scrollTop = 0;
   }
 
-  function closeNav() {
-    navPanelEl.classList.remove('is-active');
-    backdropEl.classList.remove('is-active');
-    burgerBtn.classList.remove('is-open');
-
-    burgerBtn.setAttribute('aria-expanded', 'false');
-    navPanelEl.setAttribute('aria-hidden', 'true');
-
-    unlockBody();
+  function close() {
+    panel.classList.remove('is-active');
+    backdrop.classList.remove('is-active');
+    burger.classList.remove('is-open');
+    burger.setAttribute('aria-expanded', 'false');
+    panel.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    window.scrollTo(0, savedY);
   }
 
-  function isOpen() {
-    return navPanelEl.classList.contains('is-active');
-  }
+  function isOpen() { return panel.classList.contains('is-active'); }
 
-  /* ── Events ───────────────────────────────────────────── */
-
-  // Burger toggle
-  burgerBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    isOpen() ? closeNav() : openNav();
+  // Burger
+  burger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    isOpen() ? close() : open();
   });
 
-  // Backdrop click
-  backdropEl.addEventListener('click', closeNav);
+  // Event delegation pe document — trece peste orice bug iOS
+  document.addEventListener('click', function (e) {
+    if (!isOpen()) return;
 
-  // Link click — delay scurt pentru smooth scroll
-  var navLinks = navPanelEl.querySelectorAll('.nav__item');
-  navLinks.forEach(function (link) {
-    link.addEventListener('click', function () {
-      if (isOpen()) setTimeout(closeNav, 280);
-    });
+    var link = e.target.closest('.nav__item');
+    if (link) {
+      var href = link.getAttribute('href') || '';
+      if (href.charAt(0) === '#') {
+        e.preventDefault();
+        close();
+        setTimeout(function () {
+          var target = document.querySelector(href);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        }, 400);
+      } else {
+        close(); // pentru gallery.html, testimonials.html — lasă navigarea default
+      }
+      return;
+    }
+
+    // Backdrop
+    if (e.target === backdrop || e.target.id === 'navBackdrop') {
+      close();
+    }
   });
 
-  // ESC
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && isOpen()) closeNav();
-  });
-
-  // Resize — închide la trecerea pe desktop sau la rotire
-  window.addEventListener('resize', function () {
-    if (window.innerWidth > 900 && isOpen()) closeNav();
-  });
-
-  /* ── iOS overscroll fallback ──────────────────────────────
-     overscroll-behavior:contain rezolvă Safari 16+.
-     Acest touchmove handler acoperă Safari < 16.
-  ──────────────────────────────────────────────────────── */
-  if (menuScroll) {
-    var touchStartY = 0;
-
-    menuScroll.addEventListener('touchstart', function (e) {
-      touchStartY = e.touches[0].clientY;
+  // Touchend fallback — Safari < 15
+  if (scroll) {
+    var tx = 0, ty = 0;
+    scroll.addEventListener('touchstart', function (e) {
+      tx = e.touches[0].clientX;
+      ty = e.touches[0].clientY;
     }, { passive: true });
 
-    menuScroll.addEventListener('touchmove', function (e) {
-      var scrollTop    = this.scrollTop;
-      var scrollHeight = this.scrollHeight;
-      var clientHeight = this.clientHeight;
-      var deltaY       = touchStartY - e.touches[0].clientY;
+    scroll.addEventListener('touchend', function (e) {
+      if (!isOpen()) return;
+      var dx = Math.abs(e.changedTouches[0].clientX - tx);
+      var dy = Math.abs(e.changedTouches[0].clientY - ty);
+      if (dx > 10 || dy > 20) return; // ignoră swipe
 
-      // La marginea de sus, scroll în jos — ar propaga la pagina de sub
-      var atTop    = scrollTop <= 0 && deltaY < 0;
-      // La marginea de jos, scroll în sus — ar propaga la pagina de sub
-      var atBottom = (scrollTop + clientHeight) >= scrollHeight && deltaY > 0;
+      var link = e.target.closest('.nav__item');
+      if (!link) return;
+      e.preventDefault();
 
-      if (atTop || atBottom) {
-        e.preventDefault(); // blochează propagarea
+      var href = link.getAttribute('href') || '';
+      close();
+      setTimeout(function () {
+        if (href.charAt(0) === '#') {
+          var t = document.querySelector(href);
+          if (t) t.scrollIntoView({ behavior: 'smooth' });
+        } else if (href) {
+          window.location.href = href;
+        }
+      }, 400);
+    }, { passive: false });
+
+    // Overscroll prevention Safari
+    var tsY = 0;
+    scroll.addEventListener('touchstart', function (e) { tsY = e.touches[0].clientY; }, { passive: true });
+    scroll.addEventListener('touchmove', function (e) {
+      var delta = tsY - e.touches[0].clientY;
+      if ((this.scrollTop <= 0 && delta < 0) ||
+          (this.scrollTop + this.clientHeight >= this.scrollHeight && delta > 0)) {
+        e.preventDefault();
       }
-    }, { passive: false }); // passive:false necesar pentru preventDefault
+    }, { passive: false });
   }
 
+  // ESC + resize
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && isOpen()) close(); });
+  window.addEventListener('resize', function () { if (window.innerWidth > 900 && isOpen()) close(); });
 })();
 
 /* 12. FORM */
